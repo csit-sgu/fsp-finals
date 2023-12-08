@@ -13,7 +13,7 @@ class RedisRepository:
         self._redis: redis.Redis = redis
         self._table_name: str = type
 
-    async def add_or_update_task(self, user_id: UUID, payload: Dict):
+    async def add_or_update_quiz(self, user_id: UUID, payload: Dict):
         self._redis.hset(f"{self._table_name}:{user_id}", mapping=payload)
 
     async def add_or_update_attempt(
@@ -21,7 +21,7 @@ class RedisRepository:
     ):
         self._redis.hset(f"{self._table_name}:{user_id}", task_id, score)
 
-    async def get_task(self, user_id: UUID):
+    async def get_quiz(self, user_id: UUID):
         return self._redis.hgetall(f"{self._table_name}:{user_id}")
 
     async def cleanup(self):
