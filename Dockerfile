@@ -13,11 +13,10 @@ COPY pyproject.toml requirements*.lock .python-version README.md ./
 
 RUN rye sync --no-lock --no-dev
 
-ENV PACKAGE_PATH="/app/.venv/lib/python3.11/site-packages"
 ENV PATH="/app/.venv/bin:$PATH"
 
-COPY . $PACKAGE_PATH/pyauth
-RUN pip install $PACKAGE_PATH/pyauth
+COPY shared shared
+RUN pip install -e shared
 
 FROM python:3.11-slim as runtime
 
@@ -30,4 +29,4 @@ ENV PYTHONPATH="$PYTHONPATH:$WD_NAME/.venv/lib/python3.11/site-packages"
 COPY --from=builder /opt/rye /opt/rye
 COPY --from=builder $WD_NAME/.venv .venv
 
-ENTRYPOINT ["uvicorn", "--host", "0.0.0.0", "pyauth.main:app", "--reload"]
+ENTRYPOINT ["uvicorn", "--app-dir", "src", "--host", "0.0.0.0", "main:app", "--reload"]

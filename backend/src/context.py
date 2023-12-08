@@ -2,17 +2,19 @@ from os import getenv
 
 from databases import Database
 from dotenv import load_dotenv
+from entities import User
 
-from pyauth.db import PgRepository
-from pyauth.models import User
+from shared.db import PgRepository, create_db_string
+from shared.resources import SharedResources
+from shared.utils import SHARED_CONFIG_PATH
 
 
 class Context:
     def __init__(self):
-        db_url = getenv("DATABASE_URL")
-        if not db_url:
-            raise AssertionError("$DATABASE_URL is not set")
-        self.pg = Database(db_url)
+        self.shared_settings = SharedResources(
+            f"{SHARED_CONFIG_PATH}/settings.json"
+        )
+        self.pg = Database(create_db_string(self.shared_settings.pg_creds))
         self.user_repo = PgRepository(self.pg, User)
         self.access_token_expire_minutes = int(
             getenv("ACCESS_TOKEN_EXPIRE_MINUTES") or 5

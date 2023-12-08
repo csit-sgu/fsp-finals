@@ -1,5 +1,5 @@
-CREATE DATABASE pyauth;
-\c pyauth
+CREATE DATABASE fsp_finals;
+\c fsp_finals
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 

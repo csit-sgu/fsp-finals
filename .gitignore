@@ -1,6 +1,7 @@
 .*
 !.gitignore
 !.python-version
+db
 
 __pycache__
 requirements*.lock

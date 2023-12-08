@@ -1,30 +1,32 @@
 import logging
 from contextlib import asynccontextmanager
-from typing import Annotated
 from datetime import timedelta
+from typing import Annotated
 
 import asyncpg
 from asgi_correlation_id import CorrelationIdMiddleware
-from fastapi import FastAPI, HTTPException, status, Depends, Response, Request
+from context import ctx
+from deps import get_current_user
+from entities import User
+from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
-from jose import jwt, JWTError
+from jose import JWTError, jwt
 from pydantic import ValidationError
-
-
-from pyauth.context import ctx
-from pyauth.models import User
-from pyauth.deps import get_current_user
-from pyauth.utils import (
+from utils import (
     TokenPayload,
-    hash_password,
-    verify_password,
     create_access_token,
     create_refresh_token,
+    hash_password,
+    verify_password,
 )
+from shared.routes import AuthRoutes
+
+from shared.logger import configure_logging
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    configure_logging()
     await ctx.init_db()
     yield
     await ctx.dispose_db()
@@ -41,7 +43,7 @@ async def hi() -> str:
 
 
 @app.post(
-    "/registrate", summary="Registrate new user", status_code=status.HTTP_201_CREATED
+    "/register", summary="Registrate new user", status_code=status.HTTP_201_CREATED
 )
 async def registrate(user: User):
     try:

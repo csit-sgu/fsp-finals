@@ -1,12 +1,13 @@
 services:
-  db:
-    container_name: db
+  fsp-db:
+    container_name: fsp-db
     image: postgres:16.0
     restart: always
     environment:
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     env_file:
@@ -17,14 +18,15 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
-  pyauth:
-    container_name: pyauth
-    build: .
+  fsp-backend:
+    container_name: fsp-backend
+    build: backend
     ports:
       - "8000:8000"
     volumes:
       - ./config:/config
-      - ./pyauth:/app/pyauth
+      - ./backend/src:/app/src
+      - ./shared:/app/shared
     depends_on:
-      db:
+      fsp-db:
         condition: service_healthy

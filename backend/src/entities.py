@@ -1,6 +1,6 @@
 from typing import ClassVar
 
-from pyauth.db import Entity
+from shared.db import Entity
 
 
 class User(Entity):

@@ -1,13 +1,12 @@
 from datetime import datetime
 
+from context import ctx
+from entities import User
 from fastapi import HTTPException, status
-from jose import jwt, JWTError
+from jose import JWTError, jwt
 from pydantic import ValidationError
 from starlette.requests import Request
-
-from pyauth.utils import TokenPayload
-from pyauth.models import User
-from pyauth.context import ctx
+from utils import TokenPayload
 
 
 async def get_current_user(request: Request) -> User:

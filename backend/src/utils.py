@@ -1,11 +1,10 @@
 from datetime import datetime, timedelta
-from typing import Optional, Dict
+from typing import Dict, Optional
 
 import bcrypt
+from context import Context
 from jose import jwt
 from pydantic import BaseModel
-
-from pyauth.context import Context
 
 
 def hash_password(passord: bytes) -> bytes:
