@@ -71,3 +71,6 @@ CREATE TABLE running_containers (
 --             ON q.quiz_id = qb.quiz_id
 --         INNER JOIN blocks as b
 --             ON qb.block_id = b.block_id;
+
+INSERT INTO users VALUES
+    ('aboba', 'aboba', 1, '1971-07-13', 'Michael', 'Chernigin', 69);

@@ -3,6 +3,8 @@ from contextlib import asynccontextmanager
 from datetime import timedelta
 from typing import Annotated
 
+from fastapi.middleware.cors import CORSMiddleware
+
 import asyncpg
 from asgi_correlation_id import CorrelationIdMiddleware
 from context import ctx
@@ -42,6 +44,14 @@ logger = logging.getLogger("app")
 app.include_router(quiz_router)
 app.include_router(attempt_router)
 app.include_router(block_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/", summary="Say hi.")

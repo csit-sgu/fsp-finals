@@ -1,6 +1,7 @@
 import json
-from typing import List
+from typing import List, Dict
 
+from datetime import datetime
 from enum import Enum
 from pydantic import BaseModel
 from datetime import date
@@ -60,3 +61,13 @@ class User(BaseModel):
     surname: str
     weekly_goal: float
 
+
+class Answer(BaseModel):
+    block_id: UUID
+    answer: str
+
+
+class Attempt(BaseModel):
+    quiz_id: int
+    username: str
+    answers: List[Answer]

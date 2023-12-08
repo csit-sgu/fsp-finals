@@ -1,0 +1,116 @@
+{
+    "quiz_id": 1,
+    "username": "aboba",
+    "answers": [
+        {
+            "id": 0,
+            "block_type": "multiple_choice",
+            "problem": "some-description",
+            "payload": {
+                "options": [
+                    {
+                        "text": "some-text",
+                        "score": 0.6
+                    },
+                    {
+                        "text": "other-text",
+                        "score": 0.8
+                    }
+                ],
+                "next_block": 1
+            }
+        },
+        {
+            "id": 1,
+            "block_type": "free_answer",
+            "problem": "some-description",
+            "payload": {
+                "options": [
+                    {
+                        "text": "possible-answer",
+                        "score": 0.4
+                    },
+                    {
+                        "text": "another-possible-answer",
+                        "score": 1
+                    }
+                ],
+                "next_block": 2
+            }
+        },
+        {
+            "id": 2,
+            "block_type": "case",
+            "problem": "some-problem",
+            "payload": {
+                "options": [
+                    {
+                        "text": "possible-answer",
+                        "score": 0.4,
+                        "next_block": 3 
+                    },
+                    {
+                        "text": "another-possible-answer",
+                        "score": 1,
+                        "next_block": 4
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "block_type": "case",
+            "problem": "some-problem",
+            "payload": {
+                "options": [
+                    {
+                        "text": "possible-answer",
+                        "score": 0.4,
+                        "next_block": 4
+                    },
+                    {
+                        "text": "another-possible-answer",
+                        "score": 1,
+                        "next_block": 5
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "block_type": "free_answer",
+            "problem": "some-description",
+            "payload": {
+                "options": [
+                    {
+                        "text": "possible-answer",
+                        "score": 0.4
+                    },
+                    {
+                        "text": "another-possible-answer",
+                        "score": 1
+                    }
+                ],
+                "next_block": null
+            }
+        },
+        {
+            "id": 5,
+            "block_type": "free_answer",
+            "problem": "some-description",
+            "payload": {
+                "options": [
+                    {
+                        "text": "possible-answer",
+                        "score": 0.4
+                    },
+                    {
+                        "text": "another-possible-answer",
+                        "score": 1
+                    }
+                ],
+                "next_block": null
+            }
+        }
+    ]
+}

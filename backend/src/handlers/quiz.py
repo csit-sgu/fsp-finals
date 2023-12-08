@@ -6,7 +6,7 @@ from context import ctx
 from fastapi import APIRouter
 
 from shared.entities import User
-from shared.models import Block, Quiz, QuizFrontend
+from shared.models import Block, Quiz, QuizFrontend, Attempt
 
 quiz_router = APIRouter()
 
@@ -58,3 +58,7 @@ async def create_quiz(quiz: QuizFrontend):
         entry_id=blocks[0].block_id,
     )
     await ctx.quiz_repo.add(q)
+
+@quiz_router.post("/attempt")
+async def make_attempt(attempt: Attempt):
+    pass
