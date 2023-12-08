@@ -53,7 +53,7 @@ async def registrate(user: User):
         await ctx.user_repo.add(user)
     except asyncpg.exceptions.UniqueViolationError:
         raise HTTPException(
-            status_code=400, detail="User with this email already exists"
+            status_code=400, detail="User with this username already exists"
         )
 
 
@@ -62,16 +62,17 @@ async def registrate(user: User):
     summary="Create access and refresh tokens for user",
     status_code=status.HTTP_200_OK,
 )
-async def login( form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+async def login(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     response: Response,
 ):
     err = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Incorrect email or password",
+        detail="Incorrect username or password",
         headers={"WWW-Authenticate": "Bearer"},
     )
     found_entity = await ctx.user_repo.get_one(
-        field="email", value=form_data.username
+        field="username", value=form_data.username
     )
     if found_entity is None:
         raise err
@@ -134,8 +135,8 @@ async def logout(response: Response):
 
 
 @app.get(UserRoutes.ME, summary="Get secret that only register people know")
-async def get_me(user: Annotated[User, Depends(get_current_user)]) -> str:
-    return f'You are logged in as "{user.username}"'
+async def get_me(user: Annotated[User, Depends(get_current_user)]) -> User:
+    return user
 
 
 # TODO: delete me
