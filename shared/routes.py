@@ -1,7 +1,6 @@
-from enum import Enum
-
-
-class AuthRoutes(Enum):
+class UserRoutes:
     REGISTER = "/register"
     AUTH = "/auth"
     REFRESH = "/refresh"
+    LOGOUT = "/logout"
+    ME = "me"

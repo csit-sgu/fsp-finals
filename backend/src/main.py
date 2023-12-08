@@ -19,9 +19,9 @@ from utils import (
     hash_password,
     verify_password,
 )
-from shared.routes import AuthRoutes
 
 from shared.logger import configure_logging
+from shared.routes import UserRoutes
 
 
 @asynccontextmanager
@@ -43,7 +43,9 @@ async def hi() -> str:
 
 
 @app.post(
-    "/register", summary="Registrate new user", status_code=status.HTTP_201_CREATED
+    UserRoutes.REGISTER,
+    summary="Register new user",
+    status_code=status.HTTP_201_CREATED,
 )
 async def registrate(user: User):
     try:
@@ -56,7 +58,7 @@ async def registrate(user: User):
 
 
 @app.post(
-    "/auth",
+    UserRoutes.AUTH,
     summary="Create access and refresh tokens for user",
     status_code=status.HTTP_200_OK,
 )
@@ -86,7 +88,7 @@ async def login(
     )
 
 
-@app.post("/refresh", summary="Refresh access token using refresh token")
+@app.post(UserRoutes.REFRESH, summary="Refresh access token using refresh token")
 async def refresh(request: Request, response: Response):
     err = HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
@@ -118,17 +120,17 @@ async def refresh(request: Request, response: Response):
     )
 
 
-@app.get("/logout", summary="Logout of user account")
+@app.get(UserRoutes.LOGOUT, summary="Logout of user account")
 async def logout(response: Response):
     response.delete_cookie(key="Access-Token")
 
 
-@app.get("/me", summary="Get secret that only register people know")
+@app.get(UserRoutes.ME, summary="Get secret that only register people know")
 async def get_me(user: Annotated[User, Depends(get_current_user)]) -> str:
     return f'You are logged in as "{user.username}"'
 
 
 # TODO: delete me
-@app.get("/registrate", status_code=status.HTTP_200_OK)
+@app.get(UserRoutes.REGISTER, status_code=status.HTTP_200_OK)
 async def get_users():
     return await ctx.user_repo.get_many()

@@ -11,5 +11,6 @@ class DatabaseCredentials(BaseModel):
     port: int
     db_name: str
 
+
 class SharedResources(JSONSettings):
     pg_creds: DatabaseCredentials
