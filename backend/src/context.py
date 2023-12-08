@@ -1,26 +1,24 @@
 from os import getenv
 
 from databases import Database
-from dotenv import load_dotenv
 
 from shared.db import PgRepository, create_db_string
-from shared.resources import SharedResources
-from shared.utils import SHARED_CONFIG_PATH
 from shared.entities import (
-    User,
-    Quiz,
-    Block,
     Attempt,
+    Block,
+    BlockTask,
+    Quiz,
     QuizComplexity,
     RunningContainer,
+    User,
 )
+from shared.resources import SharedResources
+from shared.utils import SHARED_CONFIG_PATH
 
 
 class Context:
     def __init__(self):
-        self.shared_settings = SharedResources(
-            f"{SHARED_CONFIG_PATH}/settings.json"
-        )
+        self.shared_settings = SharedResources(f"{SHARED_CONFIG_PATH}/settings.json")
         self.pg = Database(create_db_string(self.shared_settings.pg_creds))
         self.user_repo = PgRepository(self.pg, User)
         self.quiz_repo = PgRepository(self.pg, Quiz)
@@ -28,6 +26,7 @@ class Context:
         self.attempt_repo = PgRepository(self.pg, Attempt)
         self.complexity_repo = PgRepository(self.pg, QuizComplexity)
         self.container_repo = PgRepository(self.pg, RunningContainer)
+        self.bt_repo = PgRepository(self.pg, BlockTask)
 
         self.access_token_expire_minutes = int(
             getenv("ACCESS_TOKEN_EXPIRE_MINUTES") or 2 * 24 * 60
@@ -46,5 +45,4 @@ class Context:
         await self.pg.disconnect()
 
 
-load_dotenv()
 ctx = Context()
