@@ -96,13 +96,18 @@ def encode_block(ids: Dict):
                 options = block.payload["options"]
                 for opt in options:
                     if options[opt]["next_block"] is not None:
-                        options[opt]["next_block"] = ids[options[opt]["next_block"]]
+                        options[opt]["next_block"] = ids[
+                            options[opt]["next_block"]
+                        ]
             case _:
                 if block.payload["next_block"] is not None:
-                    block.payload["next_block"] = ids[block.payload["next_block"]]
+                    block.payload["next_block"] = ids[
+                        block.payload["next_block"]
+                    ]
         return Block(
             block_id=ids[block.block_id],
             block_type=block.block_type,
+            problem=block.problem,
             payload=json.dumps(block.payload),
         )
 
@@ -133,9 +138,30 @@ async def make_attempt(
             continue
 
         options = json.loads(original_block.payload)["options"]
-        chosen_option = options[answer.answer.strip()]
-        if chosen_option is None:
-            continue
-        total_score += chosen_option["score"]
+        if (
+            original_block.block_type == BlockType.MULTIPLE_CHOICE
+            and type(answer.answer) != list
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail=f"Expected list of answers in {original_block.block_id}",
+            )
+        if (
+            original_block.block_type != BlockType.MULTIPLE_CHOICE
+            and type(answer.answer) == list
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail=f"Expected single answer in {original_block.block_id}",
+            )
+
+        if type(answer.answer) != list:
+            answer.answer = list(answer.answer)
+
+        for ans in answer.answer:
+            chosen_option = options[ans.strip()]
+            if chosen_option is None:
+                continue
+            total_score += chosen_option["score"]
 
     return total_score

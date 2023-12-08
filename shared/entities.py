@@ -47,6 +47,7 @@ class QuizInfo(Entity):
 class Block(Entity):
     block_id: UUID
     block_type: str
+    problem: str
     payload: str  # json?
 
     _table_name: ClassVar[str] = "blocks"

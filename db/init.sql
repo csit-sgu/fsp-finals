@@ -19,6 +19,7 @@ CREATE TABLE users (
 CREATE TABLE blocks (
     block_id uuid NOT NULL PRIMARY KEY,
     block_type varchar(128) NOT NULL,
+    problem text NOT NULL,
     payload jsonb NOT NULL
 );
 

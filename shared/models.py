@@ -26,9 +26,9 @@ class AgeGroup(str, Enum):
 
 
 age_group_ranges = {
-    AgeGroup.CHILD: (0 , 12),
+    AgeGroup.CHILD: (0, 12),
     AgeGroup.TEEN: (12, 16),
-    AgeGroup.ADULT: (16, 150)
+    AgeGroup.ADULT: (16, 150),
 }
 
 
@@ -48,12 +48,14 @@ class BlockType(str, Enum):
 
 class BlockFrontend(BaseModel):
     block_id: int
+    problem: str
     block_type: BlockType
     payload: Dict  # JSON
 
 
 class Block(BaseModel):
     block_id: UUID  # UUID
+    problem: str
     block_type: BlockType
     payload: str  # JSON
 
@@ -88,7 +90,7 @@ class User(BaseModel):
 
 class Answer(BaseModel):
     block_id: UUID
-    answer: str
+    answer: str | List[str]
 
 
 class AttemptFrontend(BaseModel):
