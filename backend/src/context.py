@@ -18,6 +18,7 @@ from shared.entities import (
 
 import redis
 
+
 class Context:
     def __init__(self):
         self.shared_settings = SharedResources(

@@ -23,6 +23,7 @@ from utils import (
 from shared.logger import configure_logging
 from shared.routes import UserRoutes
 
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     configure_logging()
@@ -38,6 +39,7 @@ logger = logging.getLogger("app")
 # needed to declare FastAPI handlers
 import attempts as _
 import tasks as _
+
 
 @app.get("/", summary="Say hi.")
 async def hi() -> str:
@@ -96,7 +98,9 @@ async def login(
     )
 
 
-@app.post(UserRoutes.REFRESH, summary="Refresh access token using refresh token")
+@app.post(
+    UserRoutes.REFRESH, summary="Refresh access token using refresh token"
+)
 async def refresh(request: Request, response: Response):
     err = HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,

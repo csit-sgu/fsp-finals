@@ -41,7 +41,7 @@
     "redis_creds": {
         "username": "redis",
         "password": "1234",
-        "host": "redis",
+        "host": "fsp-redis",
         "port": "6379"
     }
 }

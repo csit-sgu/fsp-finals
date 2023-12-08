@@ -1,6 +1,8 @@
 import datetime
 import logging
 
+from uuid import UUID
+from typing import Dict
 import redis
 
 logger = logging.getLogger("app")
@@ -11,21 +13,22 @@ class RedisRepository:
         self._redis: redis.Redis = redis
         self._table_name: str = type
 
-    async def add(self, source_id: str, score: int):
-        logger.debug(f"Redis.add {source_id=} {score=}")
-        self._redis.hset(f"{self._table_name}:{source_id}", score)
+    async def add_or_update_task(self, user_id: UUID, payload: Dict):
+        self._redis.hset(f"{self._table_name}:{user_id}", mapping=payload)
 
-    async def get(self, source_id: str):
-        logger.debug(f"Redis.get {source_id=}")
-        return self._redis.hgetall(f"{self._table_name}:{source_id}")
+    async def add_or_update_attempt(
+        self, user_id: UUID, task_id: UUID, score: float
+    ):
+        self._redis.hset(f"{self._table_name}:{user_id}", task_id, score)
+
+    async def get_task(self, user_id: UUID):
+        return self._redis.hgetall(f"{self._table_name}:{user_id}")
 
     async def cleanup(self):
-        logger.debug("Redis.cleanup")
         now = datetime.now()
         keys = self._redis.execute_command(f"keys *{self._table_name}*")
         for key in keys:
             data = self._redis.hgetall(key)
             for timestamp, value in data.items():
                 if now - timestamp > datetime.timedelta(seconds=5):
-                    logger.debug(f"delete {key} {self._table_name} {value}")
                     self._redis.hdel(key, value)

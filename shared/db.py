@@ -34,7 +34,9 @@ class AbstractRepository:
         placeholders = ",".join(map(lambda x: f":{x}", keys))
         return columns, placeholders
 
-    async def add(self, entities: BaseModel | List[BaseModel], ignore_conflict=False):
+    async def add(
+        self, entities: BaseModel | List[BaseModel], ignore_conflict=False
+    ):
         if not isinstance(entities, list):
             entities = [entities]
 
@@ -58,9 +60,7 @@ class AbstractRepository:
 
         pk = entity._pk
         query_set = [f"{field} = :{field}" for field in fields]
-        query = (
-            f"UPDATE {self._table_name} SET {','.join(query_set)} WHERE {pk} = :{pk}"
-        )
+        query = f"UPDATE {self._table_name} SET {','.join(query_set)} WHERE {pk} = :{pk}"
         logger.debug(f"Sending query: {query}")
         await self._db.execute(
             query=query, values={k: dump[k] for k in fields} | {pk: dump[pk]}
@@ -75,7 +75,9 @@ class AbstractRepository:
             rows = await self._db.fetch_all(query=query)
 
         mapped = map(
-            lambda row: TypeAdapter(self._entity).validate_python(dict(row._mapping)),
+            lambda row: TypeAdapter(self._entity).validate_python(
+                dict(row._mapping)
+            ),
             rows,
         )
 
