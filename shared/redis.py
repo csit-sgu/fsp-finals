@@ -3,15 +3,13 @@ import logging
 
 import redis
 
-from shared.models import MetricType
-
 logger = logging.getLogger("app")
 
 
 class RedisRepository:
-    def __init__(self, redis: redis.Redis, metric: MetricType):
+    def __init__(self, redis: redis.Redis, type: str):
         self._redis: redis.Redis = redis
-        self._table_name: str = metric.value
+        self._table_name: str = type
 
     async def add(self, source_id: str, score: int):
         logger.debug(f"Redis.add {source_id=} {score=}")

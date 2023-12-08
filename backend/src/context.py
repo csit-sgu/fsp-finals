@@ -4,6 +4,7 @@ from databases import Database
 from dotenv import load_dotenv
 
 from shared.db import PgRepository, create_db_string
+from shared.redis import RedisRepository
 from shared.resources import SharedResources
 from shared.utils import SHARED_CONFIG_PATH
 from shared.entities import (
@@ -38,6 +39,9 @@ class Context:
             # password=redis_creds.password,
             decode_responses=True,
         )
+
+        self.redis_task_repo = RedisRepository(self.redis, "blocks")
+        self.redis_attempts_repo = RedisRepository(self.redis, "attempts")
 
         self.access_token_expire_minutes = int(
             getenv("ACCESS_TOKEN_EXPIRE_MINUTES") or 2 * 24 * 60
