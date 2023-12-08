@@ -7,7 +7,7 @@ import asyncpg
 from asgi_correlation_id import CorrelationIdMiddleware
 from context import ctx
 from deps import get_current_user
-from entities import User
+from shared.entities import User
 from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from jose import JWTError, jwt
@@ -23,7 +23,6 @@ from utils import (
 from shared.logger import configure_logging
 from shared.routes import UserRoutes
 
-
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     configure_logging()
@@ -36,6 +35,9 @@ app = FastAPI(lifespan=lifespan)
 app.add_middleware(CorrelationIdMiddleware)
 logger = logging.getLogger("app")
 
+# needed to declare FastAPI handlers
+import attempts as _
+import tasks as _
 
 @app.get("/", summary="Say hi.")
 async def hi() -> str:

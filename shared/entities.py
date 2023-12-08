@@ -22,14 +22,14 @@ class User(Entity):
 class Task(Entity):
     task_id: int
     category: str
-    entry_id: int
+    entry_id: UUID
 
     _table_name: ClassVar[str] = "tasks"
     _pk = "task_id"
 
 
 class Block(Entity):
-    block_id: int
+    block_id: UUID
     author_id: UUID
     block_type: str
     payload: Dict  # json?
@@ -55,13 +55,13 @@ class TaskComplexity(Entity):
     age_category: str
     complexity: str
 
-    _table_name: ClassVar[str] = "task_complexity"
+    _table_name: ClassVar[str] = "task_complexities"
 
 
 class RunningContainer(Entity):
     container_id: str
     user_id: UUID
-    block_id: int
+    block_id: UUID
     start_timestamp: datetime
     host_ip: str
     host_port: str

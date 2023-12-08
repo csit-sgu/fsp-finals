@@ -1,7 +1,7 @@
-from pyauth.context import ctx
-from pyauth.main import app
+from context import ctx
+from main import app
 
 
 @app.get("/attempts")
 async def get_attempts():
-    return ctx.attempt_repo.get_many()
+    return await ctx.attempt_repo.get_many()

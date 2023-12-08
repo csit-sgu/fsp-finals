@@ -17,7 +17,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE blocks (
-    block_id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    block_id uuid NOT NULL PRIMARY KEY,
     author_id uuid NOT NULL REFERENCES users(id),
     block_type varchar(128) NOT NULL,
     payload jsonb NOT NULL
@@ -26,7 +26,7 @@ CREATE TABLE blocks (
 CREATE TABLE tasks (
     task_id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     category varchar(128) NOT NULL,
-    entry_id bigint NOT NULL REFERENCES blocks(block_id)
+    entry_id uuid NOT NULL REFERENCES blocks(block_id)
 );
 
 CREATE TABLE task_complexities (
@@ -49,7 +49,7 @@ CREATE TABLE attempts (
 CREATE TABLE running_containers (
     container_id varchar(64) UNIQUE NOT NULL,
     user_id uuid NOT NULL REFERENCES users(id),
-    block_id bigint NOT NULL REFERENCES blocks(block_id),
+    block_id uuid NOT NULL REFERENCES blocks(block_id),
     host_ip varchar(32) NOT NULL,
     host_port varchar(10) NOT NULL,
     start_timestamp timestamp NOT NULL

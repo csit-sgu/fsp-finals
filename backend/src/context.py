@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from shared.db import PgRepository, create_db_string
 from shared.resources import SharedResources
 from shared.utils import SHARED_CONFIG_PATH
-from entities import (
+from shared.entities import (
     User,
     Task,
     Block,
@@ -30,10 +30,10 @@ class Context:
         self.container_repo = PgRepository(self.pg, RunningContainer)
 
         self.access_token_expire_minutes = int(
-            getenv("ACCESS_TOKEN_EXPIRE_MINUTES") or 5
+            getenv("ACCESS_TOKEN_EXPIRE_MINUTES") or 2 * 24 * 60
         )
         self.refresh_token_expire_minutes = int(
-            getenv("REFRESH_TOKEN_EXPIRE_MINUTES") or 60
+            getenv("REFRESH_TOKEN_EXPIRE_MINUTES") or 100 * 24 * 60
         )
         self.jwt_secret_key = getenv("JWT_SECRET_KEY") or "secret"
         self.jwt_refresh_secret_key = getenv("JWT_SECRET_KEY") or "secret"

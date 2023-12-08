@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from context import ctx
-from entities import User
+from shared.entities import User
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
 from pydantic import ValidationError
