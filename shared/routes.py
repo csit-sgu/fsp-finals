@@ -4,3 +4,8 @@ class UserRoutes:
     REFRESH = "/refresh"
     LOGOUT = "/logout"
     ME = "/me"
+
+
+class TaskRoutes:
+    TASK = "/task"
+    BLOCK = "/block"
