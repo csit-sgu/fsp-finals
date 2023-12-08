@@ -59,4 +59,3 @@ class User(BaseModel):
     name: str
     surname: str
     weekly_goal: float
-

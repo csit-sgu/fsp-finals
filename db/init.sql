@@ -71,3 +71,6 @@ CREATE TABLE running_containers (
 --             ON q.quiz_id = qb.quiz_id
 --         INNER JOIN blocks as b
 --             ON qb.block_id = b.block_id;
+
+CREATE VIEW stats AS
+    SELECT user_id, quiz_score, quiz_id, start_timestamp FROM attempts;

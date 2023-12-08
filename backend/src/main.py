@@ -12,6 +12,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from handlers.attempts import attempt_router
 from handlers.blocks import block_router
 from handlers.quiz import quiz_router
+from handlers.stats import stats_router
 from jose import JWTError, jwt
 from pydantic import ValidationError
 from utils import (
@@ -23,7 +24,7 @@ from utils import (
 )
 
 from shared.logger import configure_logging
-from shared.models import User
+from shared.entities import User
 from shared.routes import UserRoutes
 
 
@@ -42,6 +43,7 @@ logger = logging.getLogger("app")
 app.include_router(quiz_router)
 app.include_router(attempt_router)
 app.include_router(block_router)
+app.include_router(stats_router)
 
 
 @app.get("/", summary="Say hi.")
@@ -101,7 +103,9 @@ async def login(
     )
 
 
-@app.post(UserRoutes.REFRESH, summary="Refresh access token using refresh token")
+@app.post(
+    UserRoutes.REFRESH, summary="Refresh access token using refresh token"
+)
 async def refresh(request: Request, response: Response):
     err = HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,

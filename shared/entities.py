@@ -76,3 +76,11 @@ class RunningContainer(Entity):
     host_port: str
 
     _table_name: ClassVar[str] = "running_containers"
+
+
+class AttemptStat(Entity):
+    quiz_id: UUID
+    start_timestamp: datetime
+    score: float
+
+    _table_name: ClassVar[str] = "stats"
