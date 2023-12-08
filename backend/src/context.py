@@ -4,6 +4,7 @@ import redis
 from databases import Database
 
 from shared.db import PgRepository, create_db_string
+import shared.models as models
 from shared.entities import (
     Attempt,
     Block,

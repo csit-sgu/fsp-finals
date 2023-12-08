@@ -39,7 +39,7 @@ class QuizInfo(Entity):
     category: str
     entry_id: UUID
     age_group: str
-    complexity: str
+    complexity: int
 
     _table_name: ClassVar[str] = "quiz_info"
 
@@ -75,7 +75,7 @@ class Attempt(Entity):
 class QuizComplexity(Entity):
     quiz_id: UUID
     age_group: str
-    complexity: str
+    complexity: int
 
     _table_name: ClassVar[str] = "quiz_complexities"
 

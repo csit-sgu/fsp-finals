@@ -27,12 +27,25 @@ from utils import (
 from shared.logger import configure_logging
 from shared.entities import User
 from shared.routes import UserRoutes
+import shared.models as models
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     configure_logging()
     await ctx.init_db()
+    await ctx.user_repo.add(
+        models.User(
+            username="aboba",
+            password=hash_password(b"aboba"),
+            is_admin=True,
+            birth_date="2003-01-18",
+            name="Michael",
+            surname="Chernigin",
+            weekly_goal=100,
+        ),
+        ignore_conflict=True
+    )
     yield
     await ctx.dispose_db()
 

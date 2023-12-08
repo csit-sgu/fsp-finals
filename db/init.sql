@@ -41,7 +41,7 @@ CREATE TABLE quizzes (
 CREATE TABLE quiz_complexities (
     quiz_id uuid NOT NULL REFERENCES quizzes(quiz_id),
     age_group varchar(128) NOT NULL,
-    complexity varchar(128) NOT NULL,
+    complexity integer NOT NULL,
 
     PRIMARY KEY (quiz_id, age_group)
 );
@@ -78,6 +78,3 @@ CREATE VIEW quiz_info AS
            qc.age_group, qc.complexity 
     FROM quizzes AS q INNER JOIN quiz_complexities AS qc
     ON q.quiz_id = qc.quiz_id;
-
-INSERT INTO users (username, password, is_admin, birth_date, name, surname, weekly_score)
-    VALUES ('aboba', 'aboba', '1', '1971-07-13', 'Michael', 'Chernigin', 69);
