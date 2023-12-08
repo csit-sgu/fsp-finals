@@ -19,7 +19,9 @@ from shared.utils import SHARED_CONFIG_PATH
 
 class Context:
     def __init__(self):
-        self.shared_settings = SharedResources(f"{SHARED_CONFIG_PATH}/settings.json")
+        self.shared_settings = SharedResources(
+            f"{SHARED_CONFIG_PATH}/settings.json"
+        )
         self.pg = Database(create_db_string(self.shared_settings.pg_creds))
         self.user_repo = PgRepository(self.pg, User)
         self.quiz_repo = PgRepository(self.pg, Quiz)
