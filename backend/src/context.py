@@ -15,6 +15,7 @@ from shared.entities import (
     RunningContainer,
 )
 
+import redis
 
 class Context:
     def __init__(self):
@@ -28,6 +29,15 @@ class Context:
         self.attempt_repo = PgRepository(self.pg, Attempt)
         self.complexity_repo = PgRepository(self.pg, TaskComplexity)
         self.container_repo = PgRepository(self.pg, RunningContainer)
+
+        redis_creds = self.shared_settings.redis_creds
+        self.redis = redis.Redis(
+            host=redis_creds.host,
+            port=redis_creds.port,
+            # username=redis_creds.username,
+            # password=redis_creds.password,
+            decode_responses=True,
+        )
 
         self.access_token_expire_minutes = int(
             getenv("ACCESS_TOKEN_EXPIRE_MINUTES") or 2 * 24 * 60
