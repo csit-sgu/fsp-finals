@@ -2,6 +2,7 @@ import json
 
 from pydantic import BaseModel
 from datetime import date
+from uuid import UUID
 
 
 class JSONSettings(BaseModel):
@@ -24,6 +25,8 @@ class User(BaseModel):
     weekly_score: float
 
 
-class Task(BaseModel):
+class Quiz(BaseModel):
+    title: str
+    description: str
     category: str
-    entry_id: int
+    entry_id: UUID

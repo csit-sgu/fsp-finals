@@ -8,10 +8,10 @@ from shared.resources import SharedResources
 from shared.utils import SHARED_CONFIG_PATH
 from shared.entities import (
     User,
-    Task,
+    Quiz,
     Block,
     Attempt,
-    TaskComplexity,
+    QuizComplexity,
     RunningContainer,
 )
 
@@ -23,10 +23,10 @@ class Context:
         )
         self.pg = Database(create_db_string(self.shared_settings.pg_creds))
         self.user_repo = PgRepository(self.pg, User)
-        self.task_repo = PgRepository(self.pg, Task)
+        self.quiz_repo = PgRepository(self.pg, Quiz)
         self.block_repo = PgRepository(self.pg, Block)
         self.attempt_repo = PgRepository(self.pg, Attempt)
-        self.complexity_repo = PgRepository(self.pg, TaskComplexity)
+        self.complexity_repo = PgRepository(self.pg, QuizComplexity)
         self.container_repo = PgRepository(self.pg, RunningContainer)
 
         self.access_token_expire_minutes = int(

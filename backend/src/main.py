@@ -37,7 +37,7 @@ logger = logging.getLogger("app")
 
 # needed to declare FastAPI handlers
 import attempts as _
-import tasks as _
+import quizzes as _
 
 @app.get("/", summary="Say hi.")
 async def hi() -> str:
