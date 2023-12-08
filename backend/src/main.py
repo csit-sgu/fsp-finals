@@ -77,8 +77,8 @@ async def login(
     ):
         raise err
 
-    access_token = create_access_token(ctx, data={"sub": user.email})
-    refresh_token = create_refresh_token(ctx, data={"sub": user.email})
+    access_token = create_access_token(ctx, data={"sub": user.username})
+    refresh_token = create_refresh_token(ctx, data={"sub": user.username})
 
     response.set_cookie(key="Access-Token", value=access_token, httponly=True)
     response.set_cookie(
@@ -125,7 +125,7 @@ async def logout(response: Response):
 
 @app.get("/me", summary="Get secret that only register people know")
 async def get_me(user: Annotated[User, Depends(get_current_user)]) -> str:
-    return f'You are logged in as "{user.email}"'
+    return f'You are logged in as "{user.username}"'
 
 
 # TODO: delete me
