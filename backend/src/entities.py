@@ -1,10 +1,8 @@
-from typing import ClassVar
-from typing import Dict
+from datetime import date, datetime
+from typing import ClassVar, Dict
+from uuid import UUID
 
 from shared.db import Entity
-
-from uuid import UUID
-from datetime import date, datetime
 
 
 class User(Entity):

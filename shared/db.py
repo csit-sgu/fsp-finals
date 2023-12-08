@@ -1,5 +1,5 @@
 import logging
-from typing import List, Type, Optional, ClassVar
+from typing import ClassVar, List, Optional, Type
 
 from asyncpg.exceptions import UniqueViolationError
 from databases import Database
