@@ -30,14 +30,14 @@ class BlockFrontend(BaseModel):
 
 
 class Block(BaseModel):
-    block_id: str  # UUID
+    block_id: UUID  # UUID
     block_type: BlockType
     payload: str  # JSON
 
 
 class Quiz(BaseModel):
     title: str
-    author_id: str
+    author_id: UUID
     description: str
     category: str
     entry_id: UUID
@@ -55,8 +55,8 @@ class User(BaseModel):
     username: str
     password: bytes
     is_admin: bool = False
-    birthdate: date
+    birth_date: date
     name: str
     surname: str
-    weekly_score: float
+    weekly_goal: float
 

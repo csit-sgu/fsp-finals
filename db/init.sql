@@ -8,10 +8,10 @@ CREATE TABLE users (
     username varchar(128) UNIQUE NOT NULL,
     password bytea NOT NULL,
     is_admin boolean NOT NULL,
-    birthdate timestamp NOT NULL,
+    birth_date timestamp NOT NULL,
     name varchar(128) NOT NULL,
     surname varchar(128) NOT NULL,
-    weekly_score real NOT NULL,
+    weekly_goal real NOT NULL,
 
     PRIMARY KEY (id)
 );

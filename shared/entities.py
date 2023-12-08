@@ -10,10 +10,10 @@ class User(Entity):
     username: str
     password: bytes
     is_admin: bool
-    birthdate: date
+    birth_date: date
     name: str
     surname: str
-    weekly_score: float
+    weekly_goal: float
 
     _table_name: ClassVar[str] = "users"
     _pk: ClassVar[str] = "id"

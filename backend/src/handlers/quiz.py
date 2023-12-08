@@ -21,7 +21,7 @@ async def get_quiz(id: int):
     return await ctx.quiz_repo.get_one(field="quiz_id", value=id)
 
 
-@quiz_router.post("/quiz")
+@quiz_router.post("/quiz", status_code=201)
 async def create_quiz(quiz: QuizFrontend):
     author: User = await ctx.user_repo.get_one("username", quiz.author_username)
     ids = dict((b.block_id, str(uuid4())) for b in quiz.blocks)
