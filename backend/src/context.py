@@ -3,7 +3,6 @@ from os import getenv
 from databases import Database
 from dotenv import load_dotenv
 from entities import User
-
 from shared.db import PgRepository, create_db_string
 from shared.resources import SharedResources
 from shared.utils import SHARED_CONFIG_PATH
@@ -11,9 +10,7 @@ from shared.utils import SHARED_CONFIG_PATH
 
 class Context:
     def __init__(self):
-        self.shared_settings = SharedResources(
-            f"{SHARED_CONFIG_PATH}/settings.json"
-        )
+        self.shared_settings = SharedResources(f"{SHARED_CONFIG_PATH}/settings.json")
         self.pg = Database(create_db_string(self.shared_settings.pg_creds))
         self.user_repo = PgRepository(self.pg, User)
         self.access_token_expire_minutes = int(

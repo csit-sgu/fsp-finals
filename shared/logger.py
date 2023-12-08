@@ -3,9 +3,7 @@ from logging.config import dictConfig
 
 from shared.utils import SHARED_CONFIG_PATH
 
-LOGGING_FORMAT = (
-    "[%(levelname)s] [%(asctime)s] %(message)s (%(correlation_id)s)"
-)
+LOGGING_FORMAT = "[%(levelname)s] [%(asctime)s] %(message)s (%(correlation_id)s)"
 
 
 def configure_logging() -> None:
