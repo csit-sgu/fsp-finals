@@ -23,25 +23,34 @@ CREATE TABLE blocks (
     payload jsonb NOT NULL
 );
 
-CREATE TABLE tasks (
-    task_id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE task_blocks (
+    block_id: uuid
+    task_id: uuid
+
+    PRIMARY KEY (block_id, task_id)
+)
+
+CREATE TABLE quizzes (
+    quiz_id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    title varchar(256) NOT NULL,
+    description TEXT NOT NULL,
     category varchar(128) NOT NULL,
     entry_id uuid NOT NULL REFERENCES blocks(block_id)
 );
 
-CREATE TABLE task_complexities (
-    task_id bigint NOT NULL REFERENCES tasks(task_id),
+CREATE TABLE quiz_complexities (
+    quiz_id bigint NOT NULL REFERENCES quizzes(quiz_id),
     age_group varchar(128) NOT NULL,
     complexity varchar(128) NOT NULL,
 
-    PRIMARY KEY (task_id, age_group)
+    PRIMARY KEY (quiz_id, age_group)
 );
 
 CREATE TABLE attempts (
     attempt_id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    task_id bigint NOT NULL REFERENCES tasks(task_id),
+    quiz_id bigint NOT NULL REFERENCES quizzes(quiz_id),
     user_id uuid NOT NULL REFERENCES users(id),
-    task_score real NOT NULL,
+    quiz_score real NOT NULL,
     time_passed bigint NOT NULL, -- in seconds
     start_timestamp timestamp NOT NULL
 );
@@ -54,3 +63,8 @@ CREATE TABLE running_containers (
     host_port varchar(10) NOT NULL,
     start_timestamp timestamp NOT NULL
 );
+
+CREATE VIEW block_task AS 
+    SELECT *
+    FROM tasks AS t INNER JOIN blocks AS b
+    ON t. = p.preset_id;

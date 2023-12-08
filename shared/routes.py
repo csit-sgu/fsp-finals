@@ -6,6 +6,6 @@ class UserRoutes:
     ME = "/me"
 
 
-class TaskRoutes:
-    TASK = "/task"
+class QuizRoutes:
+    QUIZ = "/quiz"
     BLOCK = "/block"

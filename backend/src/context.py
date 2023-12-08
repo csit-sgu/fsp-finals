@@ -1,36 +1,35 @@
 from os import getenv
 
 from databases import Database
-from dotenv import load_dotenv
 
 from shared.db import PgRepository, create_db_string
 from shared.redis import RedisRepository
+from shared.entities import (
+    Attempt,
+    Block,
+    BlockTask,
+    Quiz,
+    QuizComplexity,
+    RunningContainer,
+    User,
+)
 from shared.resources import SharedResources
 from shared.utils import SHARED_CONFIG_PATH
-from shared.entities import (
-    User,
-    Task,
-    Block,
-    Attempt,
-    TaskComplexity,
-    RunningContainer,
-)
 
 import redis
 
 
 class Context:
     def __init__(self):
-        self.shared_settings = SharedResources(
-            f"{SHARED_CONFIG_PATH}/settings.json"
-        )
+        self.shared_settings = SharedResources(f"{SHARED_CONFIG_PATH}/settings.json")
         self.pg = Database(create_db_string(self.shared_settings.pg_creds))
         self.user_repo = PgRepository(self.pg, User)
-        self.task_repo = PgRepository(self.pg, Task)
+        self.quiz_repo = PgRepository(self.pg, Quiz)
         self.block_repo = PgRepository(self.pg, Block)
         self.attempt_repo = PgRepository(self.pg, Attempt)
-        self.complexity_repo = PgRepository(self.pg, TaskComplexity)
+        self.complexity_repo = PgRepository(self.pg, QuizComplexity)
         self.container_repo = PgRepository(self.pg, RunningContainer)
+        self.bt_repo = PgRepository(self.pg, BlockTask)
 
         redis_creds = self.shared_settings.redis_creds
         self.redis = redis.Redis(
@@ -61,5 +60,4 @@ class Context:
         await self.pg.disconnect()
 
 
-load_dotenv()
 ctx = Context()

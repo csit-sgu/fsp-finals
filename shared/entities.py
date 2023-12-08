@@ -19,13 +19,15 @@ class User(Entity):
     _pk: ClassVar[str] = "id"
 
 
-class Task(Entity):
-    task_id: int
+class Quiz(Entity):
+    quiz_id: int
+    title: str
+    description: str
     category: str
     entry_id: UUID
 
-    _table_name: ClassVar[str] = "tasks"
-    _pk = "task_id"
+    _table_name: ClassVar[str] = "quizzes"
+    _pk = "quiz_id"
 
 
 class Block(Entity):
@@ -38,11 +40,18 @@ class Block(Entity):
     _pk = "block_id"
 
 
+class BlockTask(Entity):
+    task_id: str
+    block_id: str
+
+    _table_name: ClassVar[str] = "block_task"
+
+
 class Attempt(Entity):
     attempt_id: int
-    task_id: int
+    quiz_id: int
     user_id: UUID
-    task_score: float
+    quiz_score: float
     time_passed: int
     start_timestamp: datetime
 
@@ -50,12 +59,12 @@ class Attempt(Entity):
     _pk = "attempt_id"
 
 
-class TaskComplexity(Entity):
-    task_id: UUID
+class QuizComplexity(Entity):
+    quiz_id: UUID
     age_category: str
     complexity: str
 
-    _table_name: ClassVar[str] = "task_complexities"
+    _table_name: ClassVar[str] = "quiz_complexities"
 
 
 class RunningContainer(Entity):

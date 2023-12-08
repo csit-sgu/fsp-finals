@@ -7,9 +7,11 @@ import asyncpg
 from asgi_correlation_id import CorrelationIdMiddleware
 from context import ctx
 from deps import get_current_user
-from shared.entities import User
 from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
+from handlers.attempts import attempt_router
+from handlers.blocks import block_router
+from handlers.tasks import task_router
 from jose import JWTError, jwt
 from pydantic import ValidationError
 from utils import (
@@ -20,6 +22,7 @@ from utils import (
     verify_password,
 )
 
+from shared.entities import User
 from shared.logger import configure_logging
 from shared.routes import UserRoutes
 
@@ -36,9 +39,9 @@ app = FastAPI(lifespan=lifespan)
 app.add_middleware(CorrelationIdMiddleware)
 logger = logging.getLogger("app")
 
-# needed to declare FastAPI handlers
-import attempts as _
-import tasks as _
+app.include_router(task_router)
+app.include_router(attempt_router)
+app.include_router(block_router)
 
 
 @app.get("/", summary="Say hi.")
