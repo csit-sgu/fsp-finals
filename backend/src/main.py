@@ -11,7 +11,7 @@ from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from handlers.attempts import attempt_router
 from handlers.blocks import block_router
-from handlers.tasks import task_router
+from handlers.quiz import quiz_router
 from jose import JWTError, jwt
 from pydantic import ValidationError
 from utils import (
@@ -39,7 +39,7 @@ app = FastAPI(lifespan=lifespan)
 app.add_middleware(CorrelationIdMiddleware)
 logger = logging.getLogger("app")
 
-app.include_router(task_router)
+app.include_router(quiz_router)
 app.include_router(attempt_router)
 app.include_router(block_router)
 

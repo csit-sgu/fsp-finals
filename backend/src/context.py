@@ -7,8 +7,8 @@ from shared.redis import RedisRepository
 from shared.entities import (
     Attempt,
     Block,
-    BlockTask,
     Quiz,
+    QuizBlock,
     QuizComplexity,
     RunningContainer,
     User,
@@ -29,7 +29,7 @@ class Context:
         self.attempt_repo = PgRepository(self.pg, Attempt)
         self.complexity_repo = PgRepository(self.pg, QuizComplexity)
         self.container_repo = PgRepository(self.pg, RunningContainer)
-        self.bt_repo = PgRepository(self.pg, BlockTask)
+        self.qb_repo = PgRepository(self.pg, QuizBlock)
 
         redis_creds = self.shared_settings.redis_creds
         self.redis = redis.Redis(
