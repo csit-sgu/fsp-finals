@@ -3,4 +3,4 @@ class UserRoutes:
     AUTH = "/auth"
     REFRESH = "/refresh"
     LOGOUT = "/logout"
-    ME = "me"
+    ME = "/me"

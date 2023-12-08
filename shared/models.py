@@ -1,6 +1,7 @@
 import json
 
 from pydantic import BaseModel
+from datetime import date
 
 
 class JSONSettings(BaseModel):
@@ -11,3 +12,18 @@ class JSONSettings(BaseModel):
 
     class Config:
         populate_by_name = True
+
+
+class User(BaseModel):
+    username: str
+    password: bytes
+    is_admin: bool
+    birthdate: date
+    name: str
+    surname: str
+    weekly_score: float
+
+
+class Task(BaseModel):
+    category: str
+    entry_id: int

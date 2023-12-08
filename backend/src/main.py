@@ -53,7 +53,7 @@ async def registrate(user: User):
         await ctx.user_repo.add(user)
     except asyncpg.exceptions.UniqueViolationError:
         raise HTTPException(
-            status_code=400, detail="User with this email already exists"
+            status_code=400, detail="User with this username already exists"
         )
 
 
@@ -63,14 +63,17 @@ async def registrate(user: User):
     status_code=status.HTTP_200_OK,
 )
 async def login(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()], response: Response
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    response: Response,
 ):
     err = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Incorrect email or password",
+        detail="Incorrect username or password",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    found_entity = await ctx.user_repo.get_one(field="email", value=form_data.username)
+    found_entity = await ctx.user_repo.get_one(
+        field="username", value=form_data.username
+    )
     if found_entity is None:
         raise err
     user = User.model_validate(found_entity)
@@ -84,7 +87,10 @@ async def login(
 
     response.set_cookie(key="Access-Token", value=access_token, httponly=True)
     response.set_cookie(
-        key="Refresh-Token", value=refresh_token, httponly=True, path="/refresh"
+        key="Refresh-Token",
+        value=refresh_token,
+        httponly=True,
+        path="/refresh",
     )
 
 
@@ -116,7 +122,10 @@ async def refresh(request: Request, response: Response):
     refresh_token = create_refresh_token(ctx, data={"sub": payload.sub})
     response.set_cookie(key="Access-Token", value=access_token, httponly=True)
     response.set_cookie(
-        key="Refresh-Token", value=refresh_token, httponly=True, path="/refresh"
+        key="Refresh-Token",
+        value=refresh_token,
+        httponly=True,
+        path="/refresh",
     )
 
 
@@ -126,8 +135,8 @@ async def logout(response: Response):
 
 
 @app.get(UserRoutes.ME, summary="Get secret that only register people know")
-async def get_me(user: Annotated[User, Depends(get_current_user)]) -> str:
-    return f'You are logged in as "{user.username}"'
+async def get_me(user: Annotated[User, Depends(get_current_user)]) -> User:
+    return user
 
 
 # TODO: delete me
