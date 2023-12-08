@@ -22,29 +22,29 @@ class User(Entity):
 class Quiz(Entity):
     quiz_id: int
     title: str
+    author_id: str
     description: str
     category: str
-    entry_id: UUID
+    entry_id: str
 
     _table_name: ClassVar[str] = "quizzes"
     _pk = "quiz_id"
 
 
 class Block(Entity):
-    block_id: UUID
-    author_id: UUID
+    block_id: str
     block_type: str
-    payload: Dict  # json?
+    payload: str  # json?
 
     _table_name: ClassVar[str] = "blocks"
     _pk = "block_id"
 
 
-class BlockTask(Entity):
+class QuizBlock(Entity):
     task_id: str
     block_id: str
 
-    _table_name: ClassVar[str] = "block_task"
+    _table_name: ClassVar[str] = "quiz_block"
 
 
 class Attempt(Entity):

@@ -18,20 +18,20 @@ CREATE TABLE users (
 
 CREATE TABLE blocks (
     block_id uuid NOT NULL PRIMARY KEY,
-    author_id uuid NOT NULL REFERENCES users(id),
     block_type varchar(128) NOT NULL,
     payload jsonb NOT NULL
 );
 
-CREATE TABLE task_blocks (
-    block_id: uuid
-    task_id: uuid
-
-    PRIMARY KEY (block_id, task_id)
-)
+-- CREATE TABLE quiz_blocks (
+--     block_id uuid,
+--     quiz_id uuidm,
+-- 
+--     PRIMARY KEY (block_id, quiz_id)
+-- )
 
 CREATE TABLE quizzes (
     quiz_id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    author_id uuid NOT NULL REFERENCES users(id),
     title varchar(256) NOT NULL,
     description TEXT NOT NULL,
     category varchar(128) NOT NULL,
@@ -64,7 +64,10 @@ CREATE TABLE running_containers (
     start_timestamp timestamp NOT NULL
 );
 
-CREATE VIEW block_task AS 
-    SELECT *
-    FROM tasks AS t INNER JOIN blocks AS b
-    ON t. = p.preset_id;
+-- CREATE VIEW quiz_block_view AS 
+--     SELECT block_id, block_type, payload, quiz_id, title, description, category
+--     FROM quiz_blocks AS qb 
+--         INNER JOIN quizzes AS q
+--             ON q.quiz_id = qb.quiz_id
+--         INNER JOIN blocks as b
+--             ON qb.block_id = b.block_id;
