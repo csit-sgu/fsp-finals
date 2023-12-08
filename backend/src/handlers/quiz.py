@@ -12,8 +12,21 @@ quiz_router = APIRouter()
 
 
 @quiz_router.get("/quiz")
-async def get_quizzes():
-    return await ctx.quiz_repo.get_many()
+async def get_quizzes(
+    age_group: str | None = None,
+    category: str | None = None,
+    complexity: str | None = None,
+):
+    filters = dict()
+    if age_group is not None:
+        filters["age_group"] = age_group
+
+    if category is not None:
+        filters["category"] = category
+
+    if complexity is not None:
+        filters["complexity"] = complexity
+    return await ctx.quiz_repo.get_many_filtered(filters)
 
 
 @quiz_router.get("/quiz/{id}")
