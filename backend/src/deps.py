@@ -38,7 +38,7 @@ async def get_current_user(request: Request) -> User:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    found_entity = await ctx.user_repo.get_one(field="email", value=token_data.sub)
+    found_entity = await ctx.user_repo.get_one(field="username", value=token_data.sub)
     if found_entity is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
