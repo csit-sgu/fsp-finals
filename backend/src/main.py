@@ -25,7 +25,7 @@ from utils import (
 )
 
 from shared.logger import configure_logging
-from shared.models import User
+from shared.entities import User
 from shared.routes import UserRoutes
 
 
@@ -111,7 +111,9 @@ async def login(
     )
 
 
-@app.post(UserRoutes.REFRESH, summary="Refresh access token using refresh token")
+@app.post(
+    UserRoutes.REFRESH, summary="Refresh access token using refresh token"
+)
 async def refresh(request: Request, response: Response):
     err = HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,

@@ -1,7 +1,6 @@
 import json
-from typing import List, Dict
+from typing import List
 
-from datetime import datetime
 from enum import Enum
 from pydantic import BaseModel
 from datetime import date
@@ -49,6 +48,8 @@ class QuizFrontend(BaseModel):
     author_username: str
     description: str
     category: str
+    complexity: str
+    age_group: str
     blocks: List[BlockFrontend]
 
 

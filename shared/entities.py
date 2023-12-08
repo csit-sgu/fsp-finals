@@ -20,7 +20,7 @@ class User(Entity):
 
 
 class Quiz(Entity):
-    quiz_id: int
+    quiz_id: UUID
     title: str
     author_id: UUID
     description: str
@@ -29,6 +29,19 @@ class Quiz(Entity):
 
     _table_name: ClassVar[str] = "quizzes"
     _pk = "quiz_id"
+
+
+class QuizInfo(Entity):
+    quiz_id: UUID
+    title: str
+    author_id: UUID
+    description: str
+    category: str
+    entry_id: UUID
+    age_group: str
+    complexity: str
+
+    _table_name: ClassVar[str] = "quiz_info"
 
 
 class Block(Entity):
@@ -49,7 +62,7 @@ class Block(Entity):
 
 class Attempt(Entity):
     attempt_id: int
-    quiz_id: int
+    quiz_id: UUID
     user_id: UUID
     quiz_score: float
     time_passed: int
@@ -61,7 +74,7 @@ class Attempt(Entity):
 
 class QuizComplexity(Entity):
     quiz_id: UUID
-    age_category: str
+    age_group: str
     complexity: str
 
     _table_name: ClassVar[str] = "quiz_complexities"

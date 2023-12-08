@@ -1,14 +1,13 @@
 import json
 from typing import List, Annotated
-from uuid import UUID, uuid4
+from uuid import uuid4
 from deps import get_current_user
 
 from context import ctx
 from fastapi import APIRouter, Depends, HTTPException
-from shared.entities import User
 
-from shared.entities import User
-from shared.models import Block, Quiz, QuizFrontend, Attempt
+from shared.entities import User, Quiz, QuizComplexity
+from shared.models import Block, QuizFrontend, Attempt
 
 quiz_router = APIRouter()
 
@@ -28,7 +27,7 @@ async def get_quizzes(
 
     if complexity is not None:
         filters["complexity"] = complexity
-    return await ctx.quiz_repo.get_many_filtered(filters)
+    return await ctx.quiz_info_repo.get_many_filtered(filters)
 
 
 @quiz_router.get("/quiz/{id}")
@@ -54,18 +53,32 @@ async def create_quiz(quiz: QuizFrontend):
     )
     await ctx.block_repo.add(blocks)
 
+    quiz_id = uuid4()
+
     q = Quiz(
+        quiz_id=quiz_id,
         title=quiz.title,
         author_id=str(author.id),
         description=quiz.description,
         category=quiz.category,
         entry_id=blocks[0].block_id,
     )
+
     await ctx.quiz_repo.add(q)
+
+    await ctx.complexity_repo.add(
+        QuizComplexity(
+            quiz_id=quiz_id,
+            complexity=quiz.complexity,
+            age_group=quiz.age_group,
+        )
+    )
 
 
 @quiz_router.post("/attempt")
-async def make_attempt(user: Annotated[User, Depends(get_current_user)], attempt: Attempt):
+async def make_attempt(
+    user: Annotated[User, Depends(get_current_user)], attempt: Attempt
+):
     if attempt.username != user.username:
         raise HTTPException(
             status_code=403,
