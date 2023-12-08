@@ -72,5 +72,5 @@ CREATE TABLE running_containers (
 --         INNER JOIN blocks as b
 --             ON qb.block_id = b.block_id;
 
-INSERT INTO users VALUES
-    ('aboba', 'aboba', 1, '1971-07-13', 'Michael', 'Chernigin', 69);
+INSERT INTO users (username, password, is_admin, birthdate, name, surname, weekly_score)
+    VALUES ('aboba', 'aboba', '1', '1971-07-13', 'Michael', 'Chernigin', 69);

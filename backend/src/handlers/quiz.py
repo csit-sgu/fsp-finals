@@ -1,9 +1,11 @@
 import json
-from typing import List
-from uuid import uuid4
+from typing import List, Annotated
+from uuid import UUID, uuid4
+from backend.src.deps import get_current_user
 
 from context import ctx
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+from shared.entities import User
 
 from shared.entities import User
 from shared.models import Block, Quiz, QuizFrontend, Attempt
@@ -63,5 +65,10 @@ async def create_quiz(quiz: QuizFrontend):
 
 
 @quiz_router.post("/attempt")
-async def make_attempt(attempt: Attempt):
+async def make_attempt(user: Annotated[User, Depends(get_current_user)], attempt: Attempt):
+    if attempt.username != user.username:
+        raise HTTPException(
+            status_code=403,
+            detail="Trying to submit attempt for another user",
+        )
     pass
