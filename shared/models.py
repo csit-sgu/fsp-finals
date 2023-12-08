@@ -45,7 +45,7 @@ class Quiz(BaseModel):
 
 class QuizFrontend(BaseModel):
     title: str
-    author_id: str
+    author_username: str
     description: str
     category: str
     blocks: List[Block]
@@ -54,7 +54,7 @@ class QuizFrontend(BaseModel):
 class User(BaseModel):
     username: str
     password: bytes
-    is_admin: bool
+    is_admin: bool = False
     birthdate: date
     name: str
     surname: str
