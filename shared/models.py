@@ -1,7 +1,7 @@
 import json
 from typing import Dict, List
 
-from enum import Enum, IntEnum
+from enum import Enum
 from pydantic import BaseModel
 from datetime import date
 from uuid import UUID

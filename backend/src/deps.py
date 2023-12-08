@@ -7,7 +7,7 @@ from jose import JWTError, jwt
 from pydantic import ValidationError
 from starlette.requests import Request
 
-from utils import TokenPayload
+from auth_utils import TokenPayload
 
 
 async def get_current_user(request: Request) -> User:

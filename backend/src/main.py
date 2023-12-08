@@ -17,7 +17,7 @@ from handlers.quiz import quiz_router
 from handlers.stats import stats_router
 from jose import JWTError, jwt
 from pydantic import ValidationError
-from utils import (
+from auth_utils import (
     TokenPayload,
     create_access_token,
     create_refresh_token,
