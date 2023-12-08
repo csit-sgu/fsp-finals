@@ -12,5 +12,13 @@ class DatabaseCredentials(BaseModel):
     db_name: str
 
 
+class RedisCredentials(BaseModel):
+    username: str
+    password: str
+    host: str
+    port: int
+
+
 class SharedResources(JSONSettings):
     pg_creds: DatabaseCredentials
+    redis_creds: RedisCredentials

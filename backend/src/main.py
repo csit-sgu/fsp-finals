@@ -43,6 +43,7 @@ app.include_router(task_router)
 app.include_router(attempt_router)
 app.include_router(block_router)
 
+
 @app.get("/", summary="Say hi.")
 async def hi() -> str:
     return "hi."
@@ -100,7 +101,9 @@ async def login(
     )
 
 
-@app.post(UserRoutes.REFRESH, summary="Refresh access token using refresh token")
+@app.post(
+    UserRoutes.REFRESH, summary="Refresh access token using refresh token"
+)
 async def refresh(request: Request, response: Response):
     err = HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
