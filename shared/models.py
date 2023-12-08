@@ -49,7 +49,7 @@ class QuizFrontend(BaseModel):
     author_username: str
     description: str
     category: str
-    blocks: List[Block]
+    blocks: List[BlockFrontend]
 
 
 class User(BaseModel):
