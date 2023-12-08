@@ -1,5 +1,5 @@
 import logging
-from typing import ClassVar, List, Optional, Type
+from typing import ClassVar, List, Optional, Type, Dict
 
 from asyncpg.exceptions import UniqueViolationError
 from databases import Database
@@ -73,6 +73,27 @@ class AbstractRepository:
             rows = await self._db.fetch_all(query=query, values={field: value})
         else:
             rows = await self._db.fetch_all(query=query)
+
+        mapped = map(
+            lambda row: TypeAdapter(self._entity).validate_python(
+                dict(row._mapping)
+            ),
+            rows,
+        )
+
+        return list(mapped)
+
+    async def get_many_filtered(self, fields: Dict = None) -> List[Entity]:
+        query = f"SELECT * FROM {self._table_name}"
+
+        if fields:
+            query += " WHERE " + " AND ".join(
+                [f"{field} = :{field}" for field in fields]
+            )
+
+        logger.debug(query)  # TODO: remove debug
+
+        rows = await self._db.fetch_all(query=query, values=fields)
 
         mapped = map(
             lambda row: TypeAdapter(self._entity).validate_python(
