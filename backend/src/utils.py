@@ -27,7 +27,9 @@ def create_access_token(
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=ctx.access_token_expire_minutes)
+        expire = datetime.utcnow() + timedelta(
+            minutes=ctx.access_token_expire_minutes
+        )
     return jwt.encode(
         claims={**data, "exp": expire},
         key=ctx.jwt_secret_key,
@@ -41,7 +43,9 @@ def create_refresh_token(
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=ctx.refresh_token_expire_minutes)
+        expire = datetime.utcnow() + timedelta(
+            minutes=ctx.refresh_token_expire_minutes
+        )
     return jwt.encode(
         claims={**data, "exp": expire},
         key=ctx.jwt_refresh_secret_key,

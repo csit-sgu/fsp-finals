@@ -19,7 +19,6 @@ from utils import (
     hash_password,
     verify_password,
 )
-from shared.routes import AuthRoutes
 
 from shared.logger import configure_logging
 
@@ -43,7 +42,9 @@ async def hi() -> str:
 
 
 @app.post(
-    "/register", summary="Registrate new user", status_code=status.HTTP_201_CREATED
+    "/register",
+    summary="Registrate new user",
+    status_code=status.HTTP_201_CREATED,
 )
 async def registrate(user: User):
     try:
@@ -61,14 +62,17 @@ async def registrate(user: User):
     status_code=status.HTTP_200_OK,
 )
 async def login(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()], response: Response
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    response: Response,
 ):
     err = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Incorrect email or password",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    found_entity = await ctx.user_repo.get_one(field="email", value=form_data.username)
+    found_entity = await ctx.user_repo.get_one(
+        field="email", value=form_data.username
+    )
     if found_entity is None:
         raise err
     user = User.model_validate(found_entity)
@@ -82,7 +86,10 @@ async def login(
 
     response.set_cookie(key="Access-Token", value=access_token, httponly=True)
     response.set_cookie(
-        key="Refresh-Token", value=refresh_token, httponly=True, path="/refresh"
+        key="Refresh-Token",
+        value=refresh_token,
+        httponly=True,
+        path="/refresh",
     )
 
 
@@ -114,7 +121,10 @@ async def refresh(request: Request, response: Response):
     refresh_token = create_refresh_token(ctx, data={"sub": payload.sub})
     response.set_cookie(key="Access-Token", value=access_token, httponly=True)
     response.set_cookie(
-        key="Refresh-Token", value=refresh_token, httponly=True, path="/refresh"
+        key="Refresh-Token",
+        value=refresh_token,
+        httponly=True,
+        path="/refresh",
     )
 
 

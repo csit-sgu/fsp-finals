@@ -2,11 +2,18 @@ from os import getenv
 
 from databases import Database
 from dotenv import load_dotenv
-from entities import User
 
 from shared.db import PgRepository, create_db_string
 from shared.resources import SharedResources
 from shared.utils import SHARED_CONFIG_PATH
+from entities import (
+    User,
+    Task,
+    Block,
+    Attempt,
+    TaskComplexity,
+    RunningContainer,
+)
 
 
 class Context:
@@ -16,6 +23,12 @@ class Context:
         )
         self.pg = Database(create_db_string(self.shared_settings.pg_creds))
         self.user_repo = PgRepository(self.pg, User)
+        self.task_repo = PgRepository(self.pg, Task)
+        self.block_repo = PgRepository(self.pg, Block)
+        self.attempt_repo = PgRepository(self.pg, Attempt)
+        self.complexity_repo = PgRepository(self.pg, TaskComplexity)
+        self.container_repo = PgRepository(self.pg, RunningContainer)
+
         self.access_token_expire_minutes = int(
             getenv("ACCESS_TOKEN_EXPIRE_MINUTES") or 5
         )
