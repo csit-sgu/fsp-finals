@@ -40,6 +40,13 @@ class Block(Entity):
     _pk = "block_id"
 
 
+class BlockTask(Entity):
+    task_id: str
+    block_id: str
+
+    _table_name: ClassVar[str] = "block_task"
+
+
 class Attempt(Entity):
     attempt_id: int
     quiz_id: int

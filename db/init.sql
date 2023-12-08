@@ -23,6 +23,13 @@ CREATE TABLE blocks (
     payload jsonb NOT NULL
 );
 
+CREATE TABLE task_blocks (
+    block_id: uuid
+    task_id: uuid
+
+    PRIMARY KEY (block_id, task_id)
+)
+
 CREATE TABLE quizzes (
     quiz_id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     title varchar(256) NOT NULL,
@@ -56,3 +63,8 @@ CREATE TABLE running_containers (
     host_port varchar(10) NOT NULL,
     start_timestamp timestamp NOT NULL
 );
+
+CREATE VIEW block_task AS 
+    SELECT *
+    FROM tasks AS t INNER JOIN blocks AS b
+    ON t. = p.preset_id;
