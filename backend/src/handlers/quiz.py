@@ -1,7 +1,7 @@
 import json
 from typing import List, Annotated
 from uuid import UUID, uuid4
-from backend.src.deps import get_current_user
+from deps import get_current_user
 
 from context import ctx
 from fastapi import APIRouter, Depends, HTTPException
