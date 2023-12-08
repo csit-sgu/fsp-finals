@@ -3,12 +3,12 @@ from typing import Dict
 
 from shared.db import Entity
 
-from uuid import uuid
+from uuid import UUID
 from datetime import date, datetime
 
 
 class User(Entity):
-    id: uuid
+    id: UUID
     username: str
     password: bytes
     is_admin: bool
@@ -32,7 +32,7 @@ class Task(Entity):
 
 class Block(Entity):
     block_id: int
-    author_id: uuid
+    author_id: UUID
     block_type: str
     payload: Dict  # json?
 
@@ -43,7 +43,7 @@ class Block(Entity):
 class Attempt(Entity):
     attempt_id: int
     task_id: int
-    user_id: uuid
+    user_id: UUID
     task_score: float
     time_passed: int
     start_timestamp: datetime
@@ -53,7 +53,7 @@ class Attempt(Entity):
 
 
 class TaskComplexity(Entity):
-    task_id: uuid
+    task_id: UUID
     age_category: str
     complexity: str
 
@@ -62,7 +62,7 @@ class TaskComplexity(Entity):
 
 class RunningContainer(Entity):
     container_id: str
-    user_id: uuid
+    user_id: UUID
     block_id: int
     start_timestamp: datetime
     host_ip: str
