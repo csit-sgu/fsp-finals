@@ -1,6 +1,7 @@
 from context import ctx
-from shared.models import Quiz
 from main import app
+
+from shared.models import Quiz
 from shared.routes import QuizRoutes
 
 

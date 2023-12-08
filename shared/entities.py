@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from typing import ClassVar, Dict
+from typing import ClassVar
 from uuid import UUID
 
 from shared.db import Entity
@@ -10,10 +10,10 @@ class User(Entity):
     username: str
     password: bytes
     is_admin: bool
-    birthdate: date
+    birth_date: date
     name: str
     surname: str
-    weekly_score: float
+    weekly_goal: float
 
     _table_name: ClassVar[str] = "users"
     _pk: ClassVar[str] = "id"
@@ -22,17 +22,17 @@ class User(Entity):
 class Quiz(Entity):
     quiz_id: int
     title: str
-    author_id: str
+    author_id: UUID
     description: str
     category: str
-    entry_id: str
+    entry_id: UUID
 
     _table_name: ClassVar[str] = "quizzes"
     _pk = "quiz_id"
 
 
 class Block(Entity):
-    block_id: str
+    block_id: UUID
     block_type: str
     payload: str  # json?
 
@@ -40,11 +40,11 @@ class Block(Entity):
     _pk = "block_id"
 
 
-class QuizBlock(Entity):
-    task_id: str
-    block_id: str
+# class QuizBlock(Entity):
+#     task_id: UUID
+#     block_id: UUID
 
-    _table_name: ClassVar[str] = "quiz_block"
+#     _table_name: ClassVar[str] = "quiz_block"
 
 
 class Attempt(Entity):

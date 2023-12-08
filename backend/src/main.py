@@ -22,8 +22,8 @@ from utils import (
     verify_password,
 )
 
-from shared.entities import User
 from shared.logger import configure_logging
+from shared.models import User
 from shared.routes import UserRoutes
 
 
@@ -54,7 +54,7 @@ async def hi() -> str:
     summary="Register new user",
     status_code=status.HTTP_201_CREATED,
 )
-async def registrate(user: User):
+async def register(user: User):
     try:
         user.password = hash_password(user.password)
         await ctx.user_repo.add(user)
@@ -101,9 +101,7 @@ async def login(
     )
 
 
-@app.post(
-    UserRoutes.REFRESH, summary="Refresh access token using refresh token"
-)
+@app.post(UserRoutes.REFRESH, summary="Refresh access token using refresh token")
 async def refresh(request: Request, response: Response):
     err = HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,

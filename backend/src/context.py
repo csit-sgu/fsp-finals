@@ -1,22 +1,20 @@
 from os import getenv
 
+import redis
 from databases import Database
 
 from shared.db import PgRepository, create_db_string
-from shared.redis import RedisRepository
 from shared.entities import (
     Attempt,
     Block,
     Quiz,
-    QuizBlock,
     QuizComplexity,
     RunningContainer,
     User,
 )
+from shared.redis import RedisRepository
 from shared.resources import SharedResources
 from shared.utils import SHARED_CONFIG_PATH
-
-import redis
 
 
 class Context:
@@ -29,7 +27,6 @@ class Context:
         self.attempt_repo = PgRepository(self.pg, Attempt)
         self.complexity_repo = PgRepository(self.pg, QuizComplexity)
         self.container_repo = PgRepository(self.pg, RunningContainer)
-        self.qb_repo = PgRepository(self.pg, QuizBlock)
 
         redis_creds = self.shared_settings.redis_creds
         self.redis = redis.Redis(
