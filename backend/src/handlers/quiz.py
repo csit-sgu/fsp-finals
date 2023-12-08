@@ -11,7 +11,7 @@ from shared.models import Block, Quiz, QuizFrontend
 quiz_router = APIRouter()
 
 
-@quiz_router.get("/quiz")
+@quiz_router.get("/quiz", summary="Get quiz using filters if needed")
 async def get_quizzes(
     age_group: str | None = None,
     category: str | None = None,
