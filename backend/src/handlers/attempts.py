@@ -134,6 +134,7 @@ async def make_attempt(
 
     attempt = Attempt(
         quiz_id=attempt_frontend.quiz_id,
+        quiz_title=attempt_frontend.quiz_title,
         user_id=user.id,
         quiz_score=total_score,
         time_passed=69,

@@ -46,6 +46,7 @@ CREATE TABLE quiz_complexities (
 CREATE TABLE attempts (
     attempt_id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     quiz_id uuid NOT NULL REFERENCES quizzes(quiz_id),
+    quiz_title varchar(256) NOT NULL,
     user_id uuid NOT NULL REFERENCES users(id),
     quiz_score real NOT NULL,
     time_passed bigint NOT NULL, -- in seconds

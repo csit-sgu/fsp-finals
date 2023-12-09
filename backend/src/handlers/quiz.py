@@ -23,7 +23,7 @@ log = logging.getLogger("app")
 async def get_quizzes(
     age_group: str | None = None,
     category: str | None = None,
-    complexity: str | None = None,
+    complexity: int | None = None,
 ):
     filters = dict()
     if age_group is not None:

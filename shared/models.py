@@ -98,6 +98,7 @@ class Answer(BaseModel):
 
 class AttemptFrontend(BaseModel):
     quiz_id: UUID
+    quiz_title: str
     username: str
     answers: List[Answer]
 
@@ -111,6 +112,7 @@ class AttemptFeedback(BaseModel):
 
 class Attempt(BaseModel):
     quiz_id: UUID
+    quiz_title: str
     user_id: UUID
     quiz_score: float
     time_passed: int

@@ -59,6 +59,7 @@ class Block(Entity):
 class Attempt(Entity):
     attempt_id: int
     quiz_id: UUID
+    quiz_title: str
     user_id: UUID
     quiz_score: float
     time_passed: int
