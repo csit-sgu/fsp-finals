@@ -113,4 +113,4 @@ class Attempt(BaseModel):
     user_id: UUID
     quiz_score: float
     time_passed: int
-    start_timestamp: str
+    start_timestamp: datetime

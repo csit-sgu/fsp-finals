@@ -2,6 +2,7 @@ import json
 import asyncio
 from typing import Annotated, List
 from deps import get_current_user
+import datetime
 
 from context import ctx
 from fastapi import APIRouter, Depends, HTTPException
@@ -136,7 +137,7 @@ async def make_attempt(
         user_id=user.id,
         quiz_score=total_score,
         time_passed=69,
-        start_timestamp="1970-01-01",
+        start_timestamp=datetime.date(1970, 1, 1),
     )
     await ctx.attempt_repo.add(attempt)
     log.warn("Added attempt")
