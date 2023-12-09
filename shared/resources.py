@@ -22,3 +22,4 @@ class RedisCredentials(BaseModel):
 class SharedResources(JSONSettings):
     pg_creds: DatabaseCredentials
     redis_creds: RedisCredentials
+    openai_key: str

@@ -8,7 +8,7 @@
     "blocks": [
         {
             "block_id": 0,
-            "block_type": "multiple_choice",
+            "block_type": "single_choice",
             "problem": "some-description",
             "payload": {
                 "options": {
