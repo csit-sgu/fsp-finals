@@ -45,6 +45,7 @@ class BlockType(str, Enum):
     MULTIPLE_CHOICE = "multiple_choice"
     SINGLE_CHOICE = "single_choice"
     CASE = "case"
+    CONTAINER = "container"
 
 
 class BlockFrontend(BaseModel):
@@ -78,6 +79,17 @@ class QuizFrontend(BaseModel):
     age_group: models.AgeGroup
     blocks: List[BlockFrontend]
 
+
+class ContainerRequest(BaseModel):
+    
+    class Payload(BaseModel):
+        image_name: str
+        image_tag: str | None = None
+        command: str | None = None
+        validator: str | None = None
+
+    block_id: UUID
+    payload: Payload
 
 class User(BaseModel):
     username: str

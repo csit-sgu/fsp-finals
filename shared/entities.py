@@ -81,8 +81,7 @@ class RunningContainer(Entity):
     user_id: UUID
     block_id: UUID
     start_timestamp: datetime
-    host_ip: str
-    host_port: str
+    base_url: str
 
     _table_name: ClassVar[str] = "running_containers"
 

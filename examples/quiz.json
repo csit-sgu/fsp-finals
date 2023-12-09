@@ -105,7 +105,7 @@
             }
         },
         {
-            "id": 6,
+            "block_id": 6,
             "block_type": "container",
             "problem": "some-description",
             "payload": {
