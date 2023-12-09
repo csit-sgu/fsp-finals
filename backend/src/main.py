@@ -3,6 +3,8 @@ from contextlib import asynccontextmanager
 from datetime import timedelta
 from typing import Annotated
 
+from fastapi.middleware.cors import CORSMiddleware
+
 import asyncpg
 from asgi_correlation_id import CorrelationIdMiddleware
 from context import ctx
@@ -26,12 +28,25 @@ from utils import (
 from shared.logger import configure_logging
 from shared.entities import User
 from shared.routes import UserRoutes
+import shared.models as models
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     configure_logging()
     await ctx.init_db()
+    await ctx.user_repo.add(
+        models.User(
+            username="aboba",
+            password=hash_password(b"aboba"),
+            is_admin=True,
+            birth_date="2003-01-18",
+            name="Michael",
+            surname="Chernigin",
+            weekly_goal=100,
+        ),
+        ignore_conflict=True
+    )
     yield
     await ctx.dispose_db()
 
@@ -44,6 +59,14 @@ app.include_router(quiz_router)
 app.include_router(attempt_router)
 app.include_router(block_router)
 app.include_router(stats_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/", summary="Say hi.")

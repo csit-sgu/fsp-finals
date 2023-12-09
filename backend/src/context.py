@@ -4,6 +4,7 @@ import redis
 from databases import Database
 
 from shared.db import PgRepository, create_db_string
+import shared.models as models
 from shared.entities import (
     Attempt,
     Block,
@@ -12,6 +13,7 @@ from shared.entities import (
     RunningContainer,
     User,
     AttemptStat,
+    QuizInfo,
 )
 from shared.redis import RedisRepository
 from shared.resources import SharedResources
@@ -31,6 +33,7 @@ class Context:
         self.complexity_repo = PgRepository(self.pg, QuizComplexity)
         self.container_repo = PgRepository(self.pg, RunningContainer)
         self.stats_repo = PgRepository(self.pg, AttemptStat)
+        self.quiz_info_repo = PgRepository(self.pg, QuizInfo)
 
         redis_creds = self.shared_settings.redis_creds
         self.redis = redis.Redis(

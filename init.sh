@@ -1,4 +1,3 @@
-#!/usr/bin/sh
 
 if [ ! -f requirements.lock ]; then
     echo "Trying to initialize dependencies..."

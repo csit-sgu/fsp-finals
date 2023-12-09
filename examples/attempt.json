@@ -1,0 +1,29 @@
+{
+    "quiz_id": "61895799-7b0b-43b0-9531-b70ebb25b8ee",
+    "username": "aboba",
+    "answers": [
+        {
+            "block_id": "7fe82bb4-ddb6-4997-a45d-89c4b025bdaa",
+            "answer": [
+                "some-text",
+                "other-text"
+            ]
+        },
+        {
+            "block_id": "4105b976-ce00-47d1-a0d4-c7e5179fb0ed",
+            "answer": "another-possible-answer"
+        },
+        {
+            "block_id": "fd4d9877-7660-41fe-9617-1e3384a6d93e",
+            "answer": "possible-answer"
+        },
+        {
+            "block_id": "d19a2bac-8f58-4095-89e9-d97b3345c706",
+            "answer": "another-possible-answer"
+        },
+        {
+            "block_id": "a2f26056-9aee-4d62-8542-069d95d9569f",
+            "answer": "possible-answer"
+        }
+    ]
+}
