@@ -26,7 +26,7 @@ async def get_container(
     block_id: UUID,
     request: ContainerRequest,
 ):
-    container = ctx.container_repo.get(user.id, block_id)
+    container = await ctx.container_repo.get(user.id, block_id)
     if container:
         log.warn("User made attempt to create another container for this block")
         log.info(f"Got existing container for user {user.id}: {container}")
@@ -40,7 +40,7 @@ async def get_container(
         "start_timestamp": datetime.now().strftime("%Y-%m-%d, %H-%M-%S"),
         "base_url": client.api.base_url,
     }
-    ctx.container_repo.add_or_update(user.id, block_id, entity)
+    await ctx.container_repo.add_or_update(user.id, block_id, entity)
 
     return container_id
 
@@ -51,7 +51,7 @@ async def get_container(
 async def submit_answer(
     user: Annotated[User, Depends(get_current_user)], block_id: UUID, answer: str
 ):
-    container = ctx.container_repo.get(user.id, block_id)
+    container = await ctx.container_repo.get(user.id, block_id)
 
     if not container:
         log.warn("User made attempt to submit answer on expired container")

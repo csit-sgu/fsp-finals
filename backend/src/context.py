@@ -1,6 +1,6 @@
 from os import getenv
 
-import redis
+import redis.asyncio as redis
 from databases import Database
 
 from shared.db import PgRepository, create_db_string

@@ -3,7 +3,7 @@ import logging
 
 from uuid import UUID
 from typing import Dict
-import redis
+import redis.asyncio as redis
 
 logger = logging.getLogger("app")
 
@@ -24,10 +24,12 @@ class RedisRepository:
 
 
 class ContainerRepository(RedisRepository):
-    def get(self, user_id: UUID, block_id: UUID):
-        return self._redis.hgetall(f"{self._document_name}:{user_id}:{block_id}")
+    async def get(self, user_id: UUID, block_id: UUID):
+        return await self._redis.hgetall(
+            f"{self._document_name}:{user_id}:{block_id}"
+        )
 
-    def add_or_update(self, user_id: UUID, block_id: UUID, payload: Dict):
-        self._redis.hset(
+    async def add_or_update(self, user_id: UUID, block_id: UUID, payload: Dict):
+        await self._redis.hset(
             f"{self._document_name}:{user_id}:{block_id}", mapping=payload
         )
