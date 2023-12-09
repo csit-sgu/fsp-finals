@@ -35,7 +35,6 @@ async def make_attempt_helper(is_subscriber, answer, overall_feedback, total_sco
         log.warn(f"Block {answer.block_id} not found")
         return
 
-    options = json.loads(original_block.payload)["options"]
     if original_block.block_type == BlockType.MULTIPLE_CHOICE and not isinstance(
         answer.answer, list
     ):
@@ -55,14 +54,18 @@ async def make_attempt_helper(is_subscriber, answer, overall_feedback, total_sco
         answer.answer = [answer.answer]
 
     prompt_block_str = f"Вопрос: {original_block.problem}"
+    if original_block.block_type == BlockType.CONTAINER:
+        prompt_block_str += f"Я попытался воспроизвести уязвимость из условия, написав следующий скрипт:\n {answer.answer}. Почему этот код неверный?"
     if original_block.block_type == BlockType.FREE_ANSWER:
         prompt_block_str += (
             f"\nЯ ответил {answer.answer}. Объясни, правильный ли это ответ и почему."
         )
     elif original_block.block_type == BlockType.MULTIPLE_CHOICE:
+        options = json.loads(original_block.payload)["options"]
         prompt_block_str += f'\nВарианты ответа: {", ".join(options.keys())}'
         prompt_block_str += f'\nЯ ответил {", ".join(answer.answer)}. Объясни, правильный ли это ответ и почему.'
     else:
+        options = json.loads(original_block.payload)["options"]
         prompt_block_str += f'\nВарианты ответа: {", ".join(options.keys())}'
         prompt_block_str += (
             f"\nЯ ответил {answer.answer}. Объясни, правильный ли это ответ и почему."
