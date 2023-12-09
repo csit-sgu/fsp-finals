@@ -138,6 +138,7 @@ async def make_attempt(
         time_passed=69,
         start_timestamp="1970-01-01",
     )
-    ctx.attempt_repo.add(attempt)
+    await ctx.attempt_repo.add(attempt)
+    log.warn("Added attempt")
 
     return res
