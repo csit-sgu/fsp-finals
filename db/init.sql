@@ -8,6 +8,7 @@ CREATE TABLE users (
     username varchar(128) UNIQUE NOT NULL,
     password bytea NOT NULL,
     is_admin boolean NOT NULL,
+    passed_test boolean NOT NULL,
     birth_date timestamp NOT NULL,
     name varchar(128) NOT NULL,
     surname varchar(128) NOT NULL,
