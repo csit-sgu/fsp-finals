@@ -93,12 +93,12 @@ def encode_block(ids: Dict):
             case BlockType.CASE:
                 options = block.payload["options"]
                 for opt in options:
-                    if options[opt].get("next_block") is not None:
+                    if options[opt].get("next_block"):
                         options[opt]["next_block"] = ids[
                             options[opt]["next_block"]
                         ]
             case _:
-                if block.payload.get("next_block") is not None:
+                if block.payload.get("next_block"):
                     block.payload["next_block"] = ids[
                         block.payload["next_block"]
                     ]

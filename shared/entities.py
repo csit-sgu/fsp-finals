@@ -55,13 +55,6 @@ class Block(Entity):
     _pk = "block_id"
 
 
-# class QuizBlock(Entity):
-#     task_id: UUID
-#     block_id: UUID
-
-#     _table_name: ClassVar[str] = "quiz_block"
-
-
 class Attempt(Entity):
     attempt_id: int
     quiz_id: UUID

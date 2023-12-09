@@ -5,6 +5,7 @@ from enum import Enum, IntEnum
 from pydantic import BaseModel
 from datetime import date
 from uuid import UUID
+from datetime import datetime
 
 import shared.models as models
 
@@ -105,3 +106,11 @@ class AttemptFeedback(BaseModel):
     correctness: int
     score: float
     feedback: str = ""
+
+
+class Attempt(BaseModel):
+    quiz_id: UUID
+    user_id: UUID
+    quiz_score: float
+    time_passed: int
+    start_timestamp: datetime
