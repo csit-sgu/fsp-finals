@@ -7,7 +7,7 @@ from context import ctx
 
 from shared.entities import User
 from docker_api import get_client, run_container, execute_command, stop_container
-from shared.models import ContainerRequest
+from shared.models import ContainerRequest, ValidateRequest
 from fastapi import HTTPException
 
 from datetime import datetime
@@ -53,7 +53,9 @@ async def get_container(
     "/container/{block_id}/validate", summary="Validate an answer submitted by a user"
 )
 async def submit_answer(
-    user: Annotated[User, Depends(get_current_user)], block_id: UUID, answer: str
+    user: Annotated[User, Depends(get_current_user)],
+    block_id: UUID,
+    request: ValidateRequest,
 ):
     container = await ctx.container_repo.get(user.id, block_id)
 
@@ -69,7 +71,7 @@ async def submit_answer(
         filter(lambda x: x[1].api.base_url == container["base_url"], ctx.docker_pool)
     )[0][1]
 
-    result = execute_command(client, container["container_id"], answer)
+    result = execute_command(client, container["container_id"], request.answer)
 
     await stop_container(client, container["container_id"])
     await ctx.container_repo.remove(user.id, block_id)

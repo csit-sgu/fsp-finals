@@ -10,6 +10,7 @@ from datetime import datetime
 import shared.models as models
 
 
+
 class JSONSettings(BaseModel):
     def __init__(self, path: str):
         with open(path, "r") as f:
@@ -91,6 +92,10 @@ class ContainerRequest(BaseModel):
         expected_output: str
 
     payload: Payload
+
+
+class ValidateRequest(BaseModel):
+    answer: str
 
 class User(BaseModel):
     username: str

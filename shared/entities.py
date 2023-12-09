@@ -11,6 +11,7 @@ class User(Entity):
     password: bytes
     is_admin: bool
     passed_test: bool
+    is_subscriber: bool
     birth_date: date
     name: str
     surname: str

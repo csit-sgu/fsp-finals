@@ -49,6 +49,7 @@ CREATE TABLE attempts (
     quiz_title varchar(256) NOT NULL,
     user_id uuid NOT NULL REFERENCES users(id),
     quiz_score real NOT NULL,
+    max_score real NOT NULL,
     time_passed bigint NOT NULL, -- in seconds
     start_timestamp timestamp NOT NULL
 );

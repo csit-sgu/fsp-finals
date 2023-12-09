@@ -16,6 +16,7 @@ from shared.models import (
 )
 import shared.entities as entities
 import logging
+from openai_api.api import send_request
 
 attempt_router = APIRouter()
 log = logging.getLogger("app")
@@ -35,9 +36,8 @@ async def make_attempt_helper(is_subscriber, answer, overall_feedback, total_sco
         return
 
     options = json.loads(original_block.payload)["options"]
-    if (
-        original_block.block_type == BlockType.MULTIPLE_CHOICE
-        and not isinstance(answer.answer, list)
+    if original_block.block_type == BlockType.MULTIPLE_CHOICE and not isinstance(
+        answer.answer, list
     ):
         raise HTTPException(
             status_code=400,
@@ -56,13 +56,17 @@ async def make_attempt_helper(is_subscriber, answer, overall_feedback, total_sco
 
     prompt_block_str = f"Вопрос: {original_block.problem}"
     if original_block.block_type == BlockType.FREE_ANSWER:
-        prompt_block_str += f"\nЯ ответил {answer.answer}. Объясни, правильный ли это ответ и почему."
+        prompt_block_str += (
+            f"\nЯ ответил {answer.answer}. Объясни, правильный ли это ответ и почему."
+        )
     elif original_block.block_type == BlockType.MULTIPLE_CHOICE:
         prompt_block_str += f'\nВарианты ответа: {", ".join(options.keys())}'
         prompt_block_str += f'\nЯ ответил {", ".join(answer.answer)}. Объясни, правильный ли это ответ и почему.'
     else:
         prompt_block_str += f'\nВарианты ответа: {", ".join(options.keys())}'
-        prompt_block_str += f"\nЯ ответил {answer.answer}. Объясни, правильный ли это ответ и почему."
+        prompt_block_str += (
+            f"\nЯ ответил {answer.answer}. Объясни, правильный ли это ответ и почему."
+        )
 
     block_score = 0
     for ans in answer.answer:
@@ -76,21 +80,7 @@ async def make_attempt_helper(is_subscriber, answer, overall_feedback, total_sco
 
     completion = ""
     if block_score < 1 and is_subscriber:
-        completion = (
-            (
-                await ctx.openai_client.chat.completions.create(
-                    messages=[
-                        {
-                            "role": "user",
-                            "content": prompt_block_str,
-                        }
-                    ],
-                    model="gpt-4",
-                )
-            )
-            .choices[0]
-            .message.content
-        )
+        completion = await send_request(prompt_block_str)
 
     correctness = 0
     if block_score >= 1:
@@ -132,11 +122,14 @@ async def make_attempt(
 
     res = await asyncio.gather(*batch)
 
+    max_score = len(batch)
+
     attempt = Attempt(
         quiz_id=attempt_frontend.quiz_id,
         quiz_title=attempt_frontend.quiz_title,
         user_id=user.id,
         quiz_score=total_score,
+        max_score=max_score,
         time_passed=69,
         start_timestamp=datetime.date(1970, 1, 1),
     )

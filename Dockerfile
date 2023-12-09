@@ -17,6 +17,8 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 COPY shared shared
 RUN pip install -e shared
+COPY openai_api openai_api
+RUN pip install -e openai_api
 
 FROM python:3.11-slim as runtime
 
