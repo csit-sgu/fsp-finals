@@ -79,10 +79,10 @@ async def make_attempt_helper(is_subscriber, answer, overall_feedback, total_sco
             except KeyError:
                 continue
             block_score += chosen_option["score"]
+        total_score += block_score
     else:
         block_score += 1
 
-    total_score += block_score
 
     completion = ""
     if block_score < 1 and is_subscriber:
