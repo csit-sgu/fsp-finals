@@ -88,7 +88,6 @@ class ContainerRequest(BaseModel):
         command: str | None = None
         validator: str | None = None
 
-    block_id: UUID
     payload: Payload
 
 class User(BaseModel):

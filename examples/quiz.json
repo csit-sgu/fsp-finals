@@ -109,8 +109,10 @@
             "block_type": "container",
             "problem": "some-description",
             "payload": {
-                "dockerfile": "FROM ubuntu:20.04\nRUN apt-get update && apt-get install -y openssl=1.1.1-1ubuntu2.1~20.04.7\nRUN apt-get install -y apache2=2.4.41-4ubuntu3.5\nEXPOSE 80\nCMD [\"apache2ctl\", \"-D\", \"FOREGROUND\"]",
-                "next_block": null
+                "image_name": "ubuntu",
+                "image_tag": "22.04",
+                "next_block": null,
+                "expected_output": "some-output"
             }
         }
     ]

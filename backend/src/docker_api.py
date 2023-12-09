@@ -5,8 +5,8 @@ from context import ctx
 log = logging.getLogger("app")
 
 
-def get_client(user_id):
-    log.info(f"Getting new client for {user_id}")
+def get_client(user_id, block_id):
+    log.info(f"Getting new client for {user_id} for block {block_id}")
     host_entry = list(sorted(ctx.docker_pool, key=lambda x: x[0]))[0]
 
     return host_entry[1]
@@ -27,13 +27,25 @@ def build_image(client, dockerfile_content, image_name, image_tag="latest"):
 
 
 def run_container(
-    client, image_name, image_tag="latest", command=None, validator=None, **kwargs
+    client, image_name, image_tag="latest", command=None, answer=None, **kwargs
 ):
     container = client.containers.run(
         f"{image_name}:{image_tag}", detach=True, command=command, tty=True
     )
     log.info(f"Started container: {container.id}")
     return container.id
+
+
+def execute_command(client, container_id, answer):
+    log.info(f"Executing {answer} script in container {container_id}")
+    container = client.containers.get(container_id)
+    result = container.exec_run(f"python3 -c \"{answer}\"")
+
+    log.info(f"Got output: {result}")
+
+    return result
+    
+
 
 
 def stop_container(client, container_id):
