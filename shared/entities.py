@@ -10,6 +10,7 @@ class User(Entity):
     username: str
     password: bytes
     is_admin: bool
+    is_subscriber: bool
     passed_test: bool
     birth_date: date
     name: str
