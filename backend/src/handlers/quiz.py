@@ -70,6 +70,7 @@ async def create_quiz(
         title=quiz.title,
         author_id=user.id,
         description=quiz.description,
+        is_paid=True,
         category=quiz.category,
         entry_id=blocks[0].block_id,
     )

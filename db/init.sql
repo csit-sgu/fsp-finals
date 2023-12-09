@@ -9,6 +9,7 @@ CREATE TABLE users (
     password bytea NOT NULL,
     is_admin boolean NOT NULL,
     passed_test boolean NOT NULL,
+    is_subscriber boolean NOT NULL,
     birth_date timestamp NOT NULL,
     name varchar(128) NOT NULL,
     surname varchar(128) NOT NULL,
@@ -30,6 +31,7 @@ CREATE TABLE quizzes (
     title varchar(256) NOT NULL,
     description TEXT NOT NULL,
     category varchar(128) NOT NULL,
+    is_for_subs boolean NOT NULL,
     entry_id uuid NOT NULL REFERENCES blocks(block_id)
 );
 

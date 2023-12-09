@@ -25,6 +25,7 @@ class Quiz(Entity):
     title: str
     author_id: UUID
     description: str
+    is_for_subs: bool
     category: str
     entry_id: UUID
 
