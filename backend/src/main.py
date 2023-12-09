@@ -15,6 +15,7 @@ from handlers.attempts import attempt_router
 from handlers.blocks import block_router
 from handlers.quiz import quiz_router
 from handlers.stats import stats_router
+from handlers.upload import upload_router
 from jose import JWTError, jwt
 from pydantic import ValidationError
 from utils import (
@@ -60,6 +61,7 @@ app.include_router(quiz_router)
 app.include_router(attempt_router)
 app.include_router(block_router)
 app.include_router(stats_router)
+app.include_router(upload_router)
 
 app.add_middleware(
     CORSMiddleware,
