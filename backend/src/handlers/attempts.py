@@ -87,7 +87,7 @@ async def make_attempt_helper(is_subscriber, answer, overall_feedback, total_sco
 
     completion = ""
     if block_score < 1 and is_subscriber:
-        completion = await send_request(prompt_block_str)
+        completion = await send_request(ctx.openai_client, prompt_block_str)
 
     correctness = 0
     if block_score >= 1:
