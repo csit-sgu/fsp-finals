@@ -122,6 +122,15 @@ async def make_attempt(
     if quiz is None:
         raise HTTPException(status_code=404, detail="Quiz not found")
 
+    overall_feedback: List[AttemptFeedback] = list()
+    total_score = 0
+    batch = [
+        make_attempt_helper(answer, overall_feedback, total_score)
+        for answer in attempt_frontend.answers
+    ]
+
+    res = await asyncio.gather(*batch)
+
     attempt = Attempt(
         quiz_id=attempt_frontend.quiz_id,
         user_id=user.id,
@@ -131,11 +140,4 @@ async def make_attempt(
     )
     ctx.attempt_repo.add(attempt)
 
-    overall_feedback: List[AttemptFeedback] = list()
-    total_score = 0
-    batch = [
-        make_attempt_helper(answer, overall_feedback, total_score)
-        for answer in attempt_frontend.answers
-    ]
-
-    return await asyncio.gather(*batch)
+    return res
