@@ -5,7 +5,6 @@ from fastapi import Depends
 from deps import get_current_user
 from shared.entities import User
 
-from datetime import datetime
 import logging
 
 stats_router = APIRouter()

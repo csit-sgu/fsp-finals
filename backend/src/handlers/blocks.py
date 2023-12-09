@@ -14,4 +14,3 @@ async def get_block(id: str):
         )
 
     return block
-
