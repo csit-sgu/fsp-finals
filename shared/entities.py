@@ -77,17 +77,6 @@ class QuizComplexity(Entity):
     _table_name: ClassVar[str] = "quiz_complexities"
 
 
-class RunningContainer(Entity):
-    container_id: str
-    user_id: UUID
-    block_id: UUID
-    start_timestamp: datetime
-    host_ip: str
-    host_port: str
-
-    _table_name: ClassVar[str] = "running_containers"
-
-
 class AttemptStat(Entity):
     quiz_id: UUID
     start_timestamp: datetime

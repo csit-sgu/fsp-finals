@@ -1,41 +1,41 @@
 from os import getenv
 
-import redis
+import redis.asyncio as redis
 from databases import Database
 
 from shared.db import PgRepository, create_db_string
-import shared.models as models
 from shared.entities import (
     Attempt,
     Block,
     Quiz,
     QuizComplexity,
-    RunningContainer,
     User,
     AttemptStat,
     QuizInfo,
 )
-from shared.redis import RedisRepository
+from shared.redis import ContainerRepository
 from shared.resources import SharedResources
 from shared.utils import SHARED_CONFIG_PATH
+from docker import DockerClient
 
 from openai import AsyncOpenAI
 
 
 class Context:
     def __init__(self):
-        self.shared_settings = SharedResources(
-            f"{SHARED_CONFIG_PATH}/settings.json"
-        )
+        self.shared_settings = SharedResources(f"{SHARED_CONFIG_PATH}/settings.json")
         self.pg = Database(create_db_string(self.shared_settings.pg_creds))
         self.user_repo = PgRepository(self.pg, User)
         self.quiz_repo = PgRepository(self.pg, Quiz)
         self.block_repo = PgRepository(self.pg, Block)
         self.attempt_repo = PgRepository(self.pg, Attempt)
         self.complexity_repo = PgRepository(self.pg, QuizComplexity)
-        self.container_repo = PgRepository(self.pg, RunningContainer)
         self.stats_repo = PgRepository(self.pg, AttemptStat)
         self.quiz_info_repo = PgRepository(self.pg, QuizInfo)
+        self.docker_pool = [
+            [0, DockerClient(**host.model_dump())]
+            for host in self.shared_settings.docker_settings.docker_hosts
+        ]
 
         redis_creds = self.shared_settings.redis_creds
         self.redis = redis.Redis(
@@ -50,8 +50,7 @@ class Context:
             api_key=self.shared_settings.openai_key,
         )
 
-        self.redis_task_repo = RedisRepository(self.redis, "blocks")
-        self.redis_attempts_repo = RedisRepository(self.redis, "attempts")
+        self.container_repo = ContainerRepository(self.redis, "containers")
 
         self.access_token_expire_minutes = int(
             getenv("ACCESS_TOKEN_EXPIRE_MINUTES") or 2 * 24 * 60

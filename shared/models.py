@@ -1,7 +1,7 @@
 import json
 from typing import Dict, List
 
-from enum import Enum, IntEnum
+from enum import Enum
 from pydantic import BaseModel
 from datetime import date
 from uuid import UUID
@@ -45,6 +45,7 @@ class BlockType(str, Enum):
     MULTIPLE_CHOICE = "multiple_choice"
     SINGLE_CHOICE = "single_choice"
     CASE = "case"
+    CONTAINER = "container"
 
 
 class BlockFrontend(BaseModel):
@@ -77,8 +78,19 @@ class QuizFrontend(BaseModel):
     category: models.Category
     complexity: int
     age_group: models.AgeGroup
+    is_for_subs: bool
     blocks: List[BlockFrontend]
 
+
+class ContainerRequest(BaseModel):
+    
+    class Payload(BaseModel):
+        image_name: str
+        image_tag: str | None = None
+        ttl: int
+        expected_output: str
+
+    payload: Payload
 
 class User(BaseModel):
     username: str

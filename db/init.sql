@@ -53,15 +53,6 @@ CREATE TABLE attempts (
     start_timestamp timestamp NOT NULL
 );
 
-CREATE TABLE running_containers (
-    container_id varchar(64) UNIQUE NOT NULL,
-    user_id uuid NOT NULL REFERENCES users(id),
-    block_id uuid NOT NULL REFERENCES blocks(block_id),
-    host_ip varchar(32) NOT NULL,
-    host_port varchar(10) NOT NULL,
-    start_timestamp timestamp NOT NULL
-);
-
 CREATE VIEW stats AS
     SELECT user_id, quiz_score, quiz_id, start_timestamp FROM attempts;
 

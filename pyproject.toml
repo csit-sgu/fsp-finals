@@ -1,5 +1,5 @@
 [project]
-name = "pyauth"
+name = "fsp-finals"
 version = "0.1.0"
 description = "Add your description here"
 authors = [{ name = "Michael Chernigin", email = "michaelchernigin@gmail.com" }]
@@ -18,6 +18,8 @@ dependencies = [
     "python-multipart>=0.0.6",
     "redis>=5.0.1",
     "openai>=1.3.8",
+    "docker>=6.1.3",
+    "sortedcontainers>=2.4.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -29,14 +31,17 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = [
-  "black>=23.10.1",
-  "isort>=5.12.0",
-  "pre-commit>=3.5.0",
-  "flake8>=5.0.4",
-  "ipython>=8.12.3",
-  "pg_activity[psycopg]>=3.4.2",
-  "pytest>=7.4.3",
-  "click>=8.1.7",
+    "black>=23.10.1",
+    "isort>=5.12.0",
+    "pre-commit>=3.5.0",
+    "flake8>=5.0.4",
+    "ipython>=8.12.3",
+    "pg_activity[psycopg]>=3.4.2",
+    "pytest>=7.4.3",
+    "click>=8.1.7",
+    "ruff>=0.1.7",
+    "python-lsp-ruff>=2.0.0",
+    "pyls-memestra>=0.0.16",
 ]
 
 [tool.hatch.metadata]
