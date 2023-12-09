@@ -39,13 +39,11 @@ def run_container(
 def execute_command(client, container_id, answer):
     log.info(f"Executing {answer} script in container {container_id}")
     container = client.containers.get(container_id)
-    result = container.exec_run(f"python3 -c \"{answer}\"")
+    result = container.exec_run(f'python3 -c "{answer}"')
 
     log.info(f"Got output: {result}")
 
     return result
-    
-
 
 
 def stop_container(client, container_id):

@@ -9,12 +9,11 @@ from shared.entities import (
     Block,
     Quiz,
     QuizComplexity,
-    RunningContainer,
     User,
     AttemptStat,
     QuizInfo,
 )
-from shared.redis import RedisRepository
+from shared.redis import ContainerRepository
 from shared.resources import SharedResources
 from shared.utils import SHARED_CONFIG_PATH
 from docker import DockerClient
@@ -31,7 +30,6 @@ class Context:
         self.block_repo = PgRepository(self.pg, Block)
         self.attempt_repo = PgRepository(self.pg, Attempt)
         self.complexity_repo = PgRepository(self.pg, QuizComplexity)
-        self.container_repo = PgRepository(self.pg, RunningContainer)
         self.stats_repo = PgRepository(self.pg, AttemptStat)
         self.quiz_info_repo = PgRepository(self.pg, QuizInfo)
         self.docker_pool = [
@@ -52,8 +50,7 @@ class Context:
             api_key=self.shared_settings.openai_key,
         )
 
-        self.redis_task_repo = RedisRepository(self.redis, "blocks")
-        self.redis_attempts_repo = RedisRepository(self.redis, "attempts")
+        self.container_repo = ContainerRepository(self.redis, "containers")
 
         self.access_token_expire_minutes = int(
             getenv("ACCESS_TOKEN_EXPIRE_MINUTES") or 2 * 24 * 60
