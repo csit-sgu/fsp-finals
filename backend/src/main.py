@@ -118,12 +118,10 @@ async def login(
     access_token = create_access_token(ctx, data={"sub": user.username})
     refresh_token = create_refresh_token(ctx, data={"sub": user.username})
 
-    response.set_cookie(key="Access-Token", secure=True, samesite='none', value=access_token, httponly=True)
+    response.set_cookie(key="Access-Token", value=access_token, httponly=True)
     response.set_cookie(
         key="Refresh-Token",
         value=refresh_token,
-        secure=True,
-        samesite='none',
         httponly=True,
         path="/refresh",
     )
@@ -157,12 +155,10 @@ async def refresh(request: Request, response: Response):
         expires_delta=timedelta(minutes=ctx.access_token_expire_minutes),
     )
     refresh_token = create_refresh_token(ctx, data={"sub": payload.sub})
-    response.set_cookie(key="Access-Token", secure=True, samesite='none', value=access_token, httponly=True)
+    response.set_cookie(key="Access-Token", value=access_token, httponly=True)
     response.set_cookie(
         key="Refresh-Token",
         value=refresh_token,
-        secure=True,
-        samesite='none',
         httponly=True,
         path="/refresh",
     )
