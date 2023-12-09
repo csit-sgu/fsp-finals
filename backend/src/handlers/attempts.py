@@ -56,7 +56,7 @@ async def make_attempt_helper(is_subscriber, answer, overall_feedback, total_sco
     prompt_block_str = f"Вопрос: {original_block.problem}"
     if original_block.block_type == BlockType.CONTAINER:
         prompt_block_str += f"Я попытался воспроизвести уязвимость из условия, написав следующий скрипт:\n {answer.answer}. Почему этот код неверный?"
-    if original_block.block_type == BlockType.FREE_ANSWER:
+    elif original_block.block_type == BlockType.FREE_ANSWER:
         prompt_block_str += (
             f"\nЯ ответил {answer.answer}. Объясни, правильный ли это ответ и почему."
         )
