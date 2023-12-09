@@ -1,9 +1,11 @@
 import logging
+import asyncpg
 from typing import ClassVar, List, Optional, Type, Dict
 
 from asyncpg.exceptions import UniqueViolationError
 from databases import Database
 from pydantic import BaseModel, TypeAdapter
+
 
 logger = logging.getLogger("app")
 
@@ -34,9 +36,7 @@ class AbstractRepository:
         placeholders = ",".join(map(lambda x: f":{x}", keys))
         return columns, placeholders
 
-    async def add(
-        self, entities: BaseModel | List[BaseModel], ignore_conflict=False
-    ):
+    async def add(self, entities: BaseModel | List[BaseModel], ignore_conflict=False):
         if not isinstance(entities, list):
             entities = [entities]
 
@@ -60,7 +60,9 @@ class AbstractRepository:
 
         pk = entity._pk
         query_set = [f"{field} = :{field}" for field in fields]
-        query = f"UPDATE {self._table_name} SET {','.join(query_set)} WHERE {pk} = :{pk}"
+        query = (
+            f"UPDATE {self._table_name} SET {','.join(query_set)} WHERE {pk} = :{pk}"
+        )
         logger.debug(f"Sending query: {query}")
         await self._db.execute(
             query=query, values={k: dump[k] for k in fields} | {pk: dump[pk]}
@@ -75,9 +77,7 @@ class AbstractRepository:
             rows = await self._db.fetch_all(query=query)
 
         mapped = map(
-            lambda row: TypeAdapter(self._entity).validate_python(
-                dict(row._mapping)
-            ),
+            lambda row: TypeAdapter(self._entity).validate_python(dict(row._mapping)),
             rows,
         )
 
@@ -91,14 +91,44 @@ class AbstractRepository:
                 [f"{field} = :{field}" for field in fields]
             )
 
-        logger.debug(query)  # TODO: remove debug
-
         rows = await self._db.fetch_all(query=query, values=fields)
 
         mapped = map(
-            lambda row: TypeAdapter(self._entity).validate_python(
-                dict(row._mapping)
-            ),
+            lambda row: TypeAdapter(self._entity).validate_python(dict(row._mapping)),
+            rows,
+        )
+
+        return list(mapped)
+
+    async def get_many_in_timestamp(
+        self,
+        field: str,
+        start_timestamp: str,
+        end_timestamp: str,
+        fields: Dict = None,
+    ) -> List[Entity]:
+        query = f"SELECT * FROM {self._table_name}"
+
+        if fields:
+            query += " WHERE " + " AND ".join(
+                [f"{field} = :{field}" for field in fields]
+            )
+            query += " AND "
+        else:
+            query += " WHERE "
+
+        query += f"{field} BETWEEN '{start_timestamp}' AND '{end_timestamp}'"
+
+        logger.debug(query)  # TODO: remove debug
+
+        # TODO: refactor?
+        try:
+            rows = await self._db.fetch_all(query=query, values=fields)
+        except asyncpg.exceptions.InvalidDatetimeFormatError:
+            rows = []
+
+        mapped = map(
+            lambda row: TypeAdapter(self._entity).validate_python(dict(row._mapping)),
             rows,
         )
 
