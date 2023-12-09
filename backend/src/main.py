@@ -79,7 +79,7 @@ async def hi() -> str:
     summary="Register new user",
     status_code=status.HTTP_201_CREATED,
 )
-async def register(user: User):
+async def register(user: models.User):
     try:
         user.password = hash_password(user.password)
         await ctx.user_repo.add(user)

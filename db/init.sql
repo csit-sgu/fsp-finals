@@ -23,13 +23,6 @@ CREATE TABLE blocks (
     payload jsonb NOT NULL
 );
 
--- CREATE TABLE quiz_blocks (
---     block_id uuid,
---     quiz_id uuidm,
--- 
---     PRIMARY KEY (block_id, quiz_id)
--- )
-
 CREATE TABLE quizzes (
     quiz_id uuid NOT NULL PRIMARY KEY,
     author_id uuid NOT NULL REFERENCES users(id),
@@ -64,14 +57,6 @@ CREATE TABLE running_containers (
     host_port varchar(10) NOT NULL,
     start_timestamp timestamp NOT NULL
 );
-
--- CREATE VIEW quiz_block_view AS 
---     SELECT block_id, block_type, payload, quiz_id, title, description, category
---     FROM quiz_blocks AS qb 
---         INNER JOIN quizzes AS q
---             ON q.quiz_id = qb.quiz_id
---         INNER JOIN blocks as b
---             ON qb.block_id = b.block_id;
 
 CREATE VIEW stats AS
     SELECT user_id, quiz_score, quiz_id, start_timestamp FROM attempts;
