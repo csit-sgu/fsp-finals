@@ -21,4 +21,6 @@ async def get_stats(
     if start_date is None or end_date is None:
         return await ctx.stats_repo.get_many(field="user_id", value=user.id)
 
-    return await ctx.stats_repo.get_many_in_timestamp("start_timestamp", start_date, end_date, {"user_id": user.id})
+    return await ctx.stats_repo.get_many_in_timestamp(
+        "start_timestamp", start_date, end_date, {"user_id": user.id}
+    )

@@ -19,6 +19,8 @@ from shared.redis import RedisRepository
 from shared.resources import SharedResources
 from shared.utils import SHARED_CONFIG_PATH
 
+from openai import AsyncOpenAI
+
 
 class Context:
     def __init__(self):
@@ -42,6 +44,10 @@ class Context:
             # username=redis_creds.username,
             # password=redis_creds.password,
             decode_responses=True,
+        )
+
+        self.openai_client = AsyncOpenAI(
+            api_key=self.shared_settings.openai_key,
         )
 
         self.redis_task_repo = RedisRepository(self.redis, "blocks")

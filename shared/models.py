@@ -97,3 +97,9 @@ class AttemptFrontend(BaseModel):
     quiz_id: UUID
     username: str
     answers: List[Answer]
+
+
+class AttemptFeedback(BaseModel):
+    correct: bool
+    score: float
+    feedback: str = ""
