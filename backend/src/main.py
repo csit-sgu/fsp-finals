@@ -40,6 +40,7 @@ async def lifespan(_: FastAPI):
             username="aboba",
             password=hash_password(b"aboba"),
             is_admin=True,
+            passed_test=False,
             birth_date="2003-01-18",
             name="Michael",
             surname="Chernigin",

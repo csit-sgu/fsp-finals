@@ -82,6 +82,7 @@ class User(BaseModel):
     username: str
     password: bytes
     is_admin: bool = False
+    passed_test: bool
     birth_date: date
     name: str
     surname: str
