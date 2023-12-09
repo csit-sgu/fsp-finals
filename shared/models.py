@@ -101,6 +101,7 @@ class AttemptFrontend(BaseModel):
 
 
 class AttemptFeedback(BaseModel):
-    correct: bool
+    block_id: UUID
+    correctness: int
     score: float
     feedback: str = ""

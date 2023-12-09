@@ -95,9 +95,16 @@ async def make_attempt_helper(answer, overall_feedback, total_score):
             .message.content
         )
 
+    correctness = 0
+    if block_score == 1:
+        correctness = 2
+    elif block_score > 0:
+        correctness = 1
+
     attempt_feedback = AttemptFeedback(
+        block_id=answer.block_id,
         feedback=completion,
-        correct=(block_score == 1),
+        correctness=correctness,
         score=block_score,
     )
 
