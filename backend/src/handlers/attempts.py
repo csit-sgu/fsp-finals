@@ -69,6 +69,21 @@ async def make_attempt(
         if not isinstance(answer.answer, list):
             answer.answer = [answer.answer]
 
+        prompt_block_str = f"Вопрос: {original_block.problem}"
+        if original_block.block_type == BlockType.FREE_ANSWER:
+            prompt_block_str += f'\nЯ ответил "{answer.answer}". Объясни, правильный ли это ответ и почему.'
+        elif original_block.block_type == BlockType.MULTIPLE_CHOICE:
+            prompt_block_str += (
+                f'\nВарианты ответа: {", ".join(options.keys())}'
+            )
+            prompt_block_str += f'\nЯ ответил "{", ".join(answer.answer)}". Объясни, правильный ли это ответ и почему.'
+        else:
+            prompt_block_str += (
+                f'\nВарианты ответа: {", ".join(options.keys())}'
+            )
+            prompt_block_str += f'\nЯ ответил "{answer.answer}". Объясни, правильный ли это ответ и почему.'
+
+        log.debug(prompt_block_str)
         block_score = 0
         for ans in answer.answer:
             chosen_option = options[ans.strip()]
@@ -81,15 +96,17 @@ async def make_attempt(
         completion = ""
         if block_score != 1:
             completion = (
-                (await ctx.openai_client.chat.completions.create(
-                    messages=[
-                        {
-                            "role": "user",
-                            "content": "Say this is a test",
-                        }
-                    ],
-                    model="gpt-4-turbo",
-                ))
+                (
+                    await ctx.openai_client.chat.completions.create(
+                        messages=[
+                            {
+                                "role": "user",
+                                "content": prompt_block_str,
+                            }
+                        ],
+                        model="gpt-4",
+                    )
+                )
                 .choices[0]
                 .message.content
             )
