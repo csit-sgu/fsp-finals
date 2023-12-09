@@ -45,7 +45,7 @@ async def lifespan(_: FastAPI):
             surname="Chernigin",
             weekly_goal=100,
         ),
-        ignore_conflict=True
+        ignore_conflict=True,
     )
     yield
     await ctx.dispose_db()

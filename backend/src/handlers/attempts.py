@@ -1,7 +1,5 @@
-from context import ctx
-from fastapi import APIRouter
 import json
-from typing import Annotated
+from typing import Annotated, List
 from deps import get_current_user
 
 from context import ctx
@@ -10,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from shared.entities import User
 from shared.models import (
     AttemptFrontend,
+    AttemptFeedback,
     BlockType,
 )
 import shared.entities as entities
@@ -39,6 +38,8 @@ async def make_attempt(
         raise HTTPException(status_code=404, detail="Quiz not found")
 
     total_score = 0
+    overall_feedback: List[AttemptFeedback] = list()
+
     for answer in attempt.answers:
         original_block: entities.Block | None = await ctx.block_repo.get_one(
             "block_id", answer.block_id
@@ -50,7 +51,7 @@ async def make_attempt(
         options = json.loads(original_block.payload)["options"]
         if (
             original_block.block_type == BlockType.MULTIPLE_CHOICE
-            and type(answer.answer) != list
+            and not isinstance(answer.answer, list)
         ):
             raise HTTPException(
                 status_code=400,
@@ -58,20 +59,42 @@ async def make_attempt(
             )
         if (
             original_block.block_type != BlockType.MULTIPLE_CHOICE
-            and type(answer.answer) == list
+            and isinstance(answer.answer, list)
         ):
             raise HTTPException(
                 status_code=400,
                 detail=f"Expected single answer in {original_block.block_id}",
             )
 
-        if type(answer.answer) != list:
+        if not isinstance(answer.answer, list):
             answer.answer = [answer.answer]
 
+        block_score = 0
         for ans in answer.answer:
             chosen_option = options[ans.strip()]
             if chosen_option is None:
                 continue
-            total_score += chosen_option["score"]
+            block_score += chosen_option["score"]
 
-    return total_score
+        total_score += block_score
+
+        if block_score != 1:
+            completion = await ctx.openai_client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": "Say this is a test",
+                    }
+                ],
+                model="gpt-4",
+            )
+
+        attempt_feedback = AttemptFeedback(
+            feedback=completion.choices[0].message.content,
+            correct=(block_score == 1),
+            score=block_score,
+        )
+
+        overall_feedback.append(attempt_feedback)
+
+    return overall_feedback
