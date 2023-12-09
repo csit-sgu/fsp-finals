@@ -27,11 +27,17 @@ def build_image(client, dockerfile_content, image_name, image_tag="latest"):
 
 
 def run_container(
-    client, image_name, image_tag="latest", command=None, answer=None, **kwargs
+    client,
+    image_name,
+    image_tag="latest",
+    ttl=ctx.shared_settings.default_container_ttl,
+    answer=None,
+    **kwargs,
 ):
     container = client.containers.run(
-        f"{image_name}:{image_tag}", detach=True, command=command, tty=True
+        f"{image_name}:{image_tag}", detach=True, tty=True
     )
+
     log.info(f"Started container: {container.id}")
     return container.id
 
@@ -46,7 +52,7 @@ def execute_command(client, container_id, answer):
     return result
 
 
-def stop_container(client, container_id):
-    container = client.containers.get(container_id)
+async def stop_container(client, container_id):
+    container = await client.containers.get(container_id)
     container.stop()
     log.info(f"Container stopped successfully: {container_id}")

@@ -56,5 +56,6 @@
             }
         ],
         "default_image": "ubuntu:24.04"
-    }
+    },
+    "default_container_ttl": 30
 }

@@ -6,7 +6,7 @@ from deps import get_current_user
 from context import ctx
 
 from shared.entities import User
-from docker_api import get_client, run_container, execute_command
+from docker_api import get_client, run_container, execute_command, stop_container
 from shared.models import ContainerRequest
 from fastapi import HTTPException
 
@@ -28,9 +28,10 @@ async def get_container(
 ):
     container = await ctx.container_repo.get(user.id, block_id)
     if container:
-        log.warn("User made attempt to create another container for this block")
+        message = "User made attempt to create another container for this block"
+        log.warn(message)
         log.info(f"Got existing container for user {user.id}: {container}")
-        raise HTTPException(status_code=400)
+        raise HTTPException(status_code=400, detail=message)
 
     client = get_client(user.id, block_id)
     container_id = run_container(client, **request.payload.model_dump())
@@ -40,7 +41,10 @@ async def get_container(
         "start_timestamp": datetime.now().strftime("%Y-%m-%d, %H-%M-%S"),
         "base_url": client.api.base_url,
     }
-    await ctx.container_repo.add_or_update(user.id, block_id, entity)
+
+    await ctx.container_repo.add_or_update(
+        user.id, block_id, entity, ttl=request.payload.ttl
+    )
 
     return container_id
 
@@ -54,8 +58,9 @@ async def submit_answer(
     container = await ctx.container_repo.get(user.id, block_id)
 
     if not container:
-        log.warn("User made attempt to submit answer on expired container")
-        raise HTTPException(status_code=400)
+        message = "User made attempt to submit answer on expired container"
+        log.warn(message)
+        raise HTTPException(status_code=400, detail=message)
 
     block = await ctx.block_repo.get_one("block_id", block_id)
     expected_output = (json.loads(block.payload))["expected_output"]
@@ -65,5 +70,8 @@ async def submit_answer(
     )[0][1]
 
     result = execute_command(client, container["container_id"], answer)
+
+    await stop_container(client, container["container_id"])
+    await ctx.container_repo.remove(user.id, block_id)
 
     return result.output.decode("utf-8").strip() == expected_output.strip()

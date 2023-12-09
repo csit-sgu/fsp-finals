@@ -85,8 +85,8 @@ class ContainerRequest(BaseModel):
     class Payload(BaseModel):
         image_name: str
         image_tag: str | None = None
-        command: str | None = None
-        validator: str | None = None
+        ttl: int
+        expected_output: str
 
     payload: Payload
 

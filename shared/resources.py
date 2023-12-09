@@ -36,3 +36,4 @@ class SharedResources(JSONSettings):
     redis_creds: RedisCredentials
     openai_key: str
     docker_settings: DockerSettings
+    default_container_ttl: int = 30

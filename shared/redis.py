@@ -25,11 +25,15 @@ class RedisRepository:
 
 class ContainerRepository(RedisRepository):
     async def get(self, user_id: UUID, block_id: UUID):
-        return await self._redis.hgetall(
-            f"{self._document_name}:{user_id}:{block_id}"
-        )
+        return await self._redis.hgetall(f"{self._document_name}:{user_id}:{block_id}")
 
-    async def add_or_update(self, user_id: UUID, block_id: UUID, payload: Dict):
-        await self._redis.hset(
-            f"{self._document_name}:{user_id}:{block_id}", mapping=payload
-        )
+    async def add_or_update(
+        self, user_id: UUID, block_id: UUID, payload: Dict, *, ttl=None
+    ):
+        key = f"{self._document_name}:{user_id}:{block_id}"
+        await self._redis.hset(key, mapping=payload)
+        if ttl is not None:
+            await self._redis.expire(key, ttl)
+
+    async def remove(self, user_id: UUID, block_id: UUID):
+        await self._redis.hdel(f"{self._document_name}:{user_id}:{block_id}")
