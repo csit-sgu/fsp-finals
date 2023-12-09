@@ -78,19 +78,24 @@ async def make_attempt(
 
         total_score += block_score
 
+        completion = ""
         if block_score != 1:
-            completion = await ctx.openai_client.chat.completions.create(
-                messages=[
-                    {
-                        "role": "user",
-                        "content": "Say this is a test",
-                    }
-                ],
-                model="gpt-4",
+            completion = (
+                (await ctx.openai_client.chat.completions.create(
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": "Say this is a test",
+                        }
+                    ],
+                    model="gpt-4-turbo",
+                ))
+                .choices[0]
+                .message.content
             )
 
         attempt_feedback = AttemptFeedback(
-            feedback=completion.choices[0].message.content,
+            feedback=completion,
             correct=(block_score == 1),
             score=block_score,
         )
