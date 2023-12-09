@@ -5,6 +5,7 @@
     "category": "web",
     "complexity": 3,
     "age_group": "adult",
+    "is_for_subs": false,
     "blocks": [
         {
             "block_id": 0,

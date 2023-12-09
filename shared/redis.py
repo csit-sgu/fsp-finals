@@ -36,4 +36,4 @@ class ContainerRepository(RedisRepository):
             await self._redis.expire(key, ttl)
 
     async def remove(self, user_id: UUID, block_id: UUID):
-        await self._redis.hdel(f"{self._document_name}:{user_id}:{block_id}")
+        await self._redis.delete(f"{self._document_name}:{user_id}:{block_id}")

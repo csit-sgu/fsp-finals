@@ -77,6 +77,7 @@ class QuizFrontend(BaseModel):
     category: models.Category
     complexity: int
     age_group: models.AgeGroup
+    is_for_subs: bool
     blocks: List[BlockFrontend]
 
 

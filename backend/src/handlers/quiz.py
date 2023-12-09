@@ -73,6 +73,7 @@ async def create_quiz(
         is_paid=True,
         category=quiz.category,
         entry_id=blocks[0].block_id,
+        is_for_subs=quiz.is_for_subs
     )
 
     await ctx.quiz_repo.add(q)

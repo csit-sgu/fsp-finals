@@ -53,6 +53,6 @@ def execute_command(client, container_id, answer):
 
 
 async def stop_container(client, container_id):
-    container = await client.containers.get(container_id)
+    container = client.containers.get(container_id)
     container.stop()
     log.info(f"Container stopped successfully: {container_id}")
