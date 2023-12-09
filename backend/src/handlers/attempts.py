@@ -42,7 +42,7 @@ async def make_attempt_helper(is_subscriber, answer, overall_feedback, total_sco
             status_code=400,
             detail=f"Expected list of answers in {original_block.block_id}",
         )
-    if original_block.block_type != BlockType.MULTIPLE_CHOICE and isinstance(
+    if original_block.block_type == BlockType.SINGLE_CHOICE and isinstance(
         answer.answer, list
     ):
         raise HTTPException(
@@ -72,12 +72,15 @@ async def make_attempt_helper(is_subscriber, answer, overall_feedback, total_sco
         )
 
     block_score = 0
-    for ans in answer.answer:
-        try:
-            chosen_option = options[ans.strip()]
-        except KeyError:
-            continue
-        block_score += chosen_option["score"]
+    if original_block.block_type != BlockType.CONTAINER:
+        for ans in answer.answer:
+            try:
+                chosen_option = options[ans.strip()]
+            except KeyError:
+                continue
+            block_score += chosen_option["score"]
+    else:
+        block_score += 1
 
     total_score += block_score
 
