@@ -26,7 +26,7 @@ async def get_attempts():
     return await ctx.attempt_repo.get_many()
 
 
-async def make_attempt_helper(answer, overall_feedback, total_score):
+async def make_attempt_helper(is_subscriber, answer, overall_feedback, total_score):
     original_block: entities.Block | None = await ctx.block_repo.get_one(
         "block_id", answer.block_id
     )
@@ -75,7 +75,7 @@ async def make_attempt_helper(answer, overall_feedback, total_score):
     total_score += block_score
 
     completion = ""
-    if block_score < 1:
+    if block_score < 1 and is_subscriber:
         completion = (
             (
                 await ctx.openai_client.chat.completions.create(
@@ -126,7 +126,7 @@ async def make_attempt(
     overall_feedback: List[AttemptFeedback] = list()
     total_score = 0
     batch = [
-        make_attempt_helper(answer, overall_feedback, total_score)
+        make_attempt_helper(user.is_subscriber, answer, overall_feedback, total_score)
         for answer in attempt_frontend.answers
     ]
 
